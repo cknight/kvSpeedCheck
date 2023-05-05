@@ -1,71 +1,45 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
+import { testDenoKv } from "../db/denoKv.ts";
+import { testUpstashRedis } from "../db/upstashRedis.ts";
+import { dbPerfRun } from "../types.ts";
 
-interface dbPerf {
-  openPerformance: number;
-  regionId: string;
-  writePerformance: number;
-  atomicWritePerformance: number;
-  eventualReadPerformance: number;
-  strongReadPerformance: number;
-}
 
 export const handler: Handlers = {
   async GET(req, ctx) {
-    const startOpen = performance.now();
-    const kv = await Deno.openKv();
-    const openPerformance = performance.now() - startOpen;
+    const denoKvPerf = await testDenoKv();
+    const upstashRedisPerf = await testUpstashRedis();
 
-    const regionId = Deno.env.get("DENO_REGION") || "unknown";
-
-    //warm up
-    await kv.set(["hello"], "world");
-    await kv.get(["hello"], {consistency: "eventual"});
-    await kv.get(["hello"], {consistency: "strong"});
-
-    const startWrite = performance.now();
-    await kv.set(["hello"], "world");
-    const writePerformance = performance.now() - startWrite;
-
-    const startAtomicWrite = performance.now();
-    await kv.atomic().set(["atomic hello"], "world").commit();
-    const atomicWritePerformance = performance.now() - startAtomicWrite;
-
-    const startEventualRead = performance.now();
-    const eventualVal = await kv.get(["hello"], {consistency: "eventual"}) as string;
-    const eventualReadPerformance = performance.now() - startEventualRead;
-
-    const startStrongRead = performance.now();
-    const strongVal = await kv.get(["hello"], {consistency: "strong"}) as string;
-    const strongReadPerformance = performance.now() - startStrongRead;
-
-    const dbPerf: dbPerf = {
-      openPerformance,
-      regionId,
-      writePerformance,
-      atomicWritePerformance,
-      eventualReadPerformance,
-      strongReadPerformance,
-    };
-
-    return await ctx.render(dbPerf);
+    return await ctx.render([denoKvPerf, upstashRedisPerf]);
   },
 };
 
-export default function Home({data}: PageProps<dbPerf>) {
+export default function Home(data: PageProps<dbPerfRun[]>) {
+  function outputPerformance(performance: number): string {
+    return performance >= 0 ? performance + "ms" : "not measured";
+  }
+
   return (
     <>
       <Head>
         <title>KV Speed Check</title>
       </Head>
       <div class="p-4 mx-auto max-w-screen-md">
-        <h1>KV Speed Check</h1>
-        <p>Open KV: {data.openPerformance}ms</p>
-        <p>Region: {data.regionId}</p>
-        <p>Write KV: {data.writePerformance}ms</p>
-        <p>Atomic Write KV: {data.atomicWritePerformance}ms</p>
-        <p>Eventual Read KV: {data.eventualReadPerformance}ms</p>
-        <p>Strong Read KV: {data.strongReadPerformance}ms</p>
+        <h1 class="mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">Edge DB speed showdown</h1>
+        <p class="mt-5">Source region: {data.data[0].regionId}</p>
+
+        {
+          data.data.map(db => {
+            return (
+            <>
+              <p class="mt-5 font-semibold text-xl">{db.dbName}</p>
+              <p>Write: {outputPerformance(db.writePerformance)}</p>
+              <p>Atomic write: {outputPerformance(db.writePerformance)}</p>
+              <p>Eventual Read: {outputPerformance(db.eventualReadPerformance)}</p>
+              <p>Strong Read: {outputPerformance(db.strongReadPerformance)}</p>
+            </>
+          )})
+        }
       </div>
     </>
   );
