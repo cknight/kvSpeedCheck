@@ -1,0 +1,1 @@
+//Transactions are not supported across regions in global tables.

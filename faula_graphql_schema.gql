@@ -1,0 +1,8 @@
+type Todo {
+   title: String!
+   desc: String!
+}
+
+type Query {
+   getTodo(title: String!): Todo!
+}

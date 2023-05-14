@@ -1,31 +1,30 @@
-import { dbPerfRun } from "../types.ts";
+import { DbPerfRun } from "../types.ts";
+import { kv, recordTiming } from "./util.ts";
 
-export async function testDenoKv(): Promise<dbPerfRun> {
-  //measure open performance
-  const kv = await Deno.openKv();
-  const regionId = Deno.env.get("DENO_REGION") || "unknown";
-
+export async function testDenoKv(): Promise<DbPerfRun> {
   //measure write performance
-  const startWrite = performance.now();
+  const startWrite = Date.now();
   await kv.set(["hello"], "world");
-  const writePerformance = performance.now() - startWrite;
+  const writePerformance = Date.now() - startWrite;
 
   //measure write performance
-  const startAtomicWrite = performance.now();
+  const startAtomicWrite = Date.now();
   await kv.atomic().set(["hello"], "world").set(["123"], "456").commit();
-  const atomicWritePerformance = performance.now() - startAtomicWrite;
+  const atomicWritePerformance = Date.now() - startAtomicWrite;
 
   //measure eventual read performance
-  const startEventualRead = performance.now();
+  const startEventualRead = Date.now();
   await kv.get(["hello"], {consistency: "eventual"});
-  const eventualReadPerformance = performance.now() - startEventualRead;
+  const eventualReadPerformance = Date.now() - startEventualRead;
 
   //measure strong read performance
-  const startStrongRead = performance.now();
+  const startStrongRead = Date.now();
   await kv.get(["hello"], {consistency: "strong"});
-  const strongReadPerformance = performance.now() - startStrongRead;
+  const strongReadPerformance = Date.now() - startStrongRead;
 
-  const dbPerf: dbPerfRun = {
+  const regionId = Deno.env.get("DENO_REGION") || "unknown";
+
+  const dbPerf: DbPerfRun = {
     dbName: "Deno KV",
     regionId,
     writePerformance,
@@ -33,6 +32,7 @@ export async function testDenoKv(): Promise<dbPerfRun> {
     eventualReadPerformance,
     strongReadPerformance,
   };
+  await recordTiming(dbPerf);
 
   return dbPerf;
 }
