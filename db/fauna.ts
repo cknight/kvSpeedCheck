@@ -47,7 +47,7 @@ export async function testFauna(): Promise<DbPerfRun> {
   };
   await recordTiming(dbPerf);
 
-  return defaultRecord;
+  return dbPerf;
 }
 
 async function queryFauna(token: string, query: string, variables: { [key: string]: unknown }) {
