@@ -37,7 +37,7 @@ export const handler: Handlers = {
       statsForDb.strongReadPerformanceStats.push(entry.value.strongReadPerformance);
     }
 
-    return await ctx.render({measurement: [denoKvPerf, upstashRedisPerf], summary: regions});
+    return await ctx.render({measurement: [denoKvPerf, upstashRedisPerf, faunaPerf], summary: regions});
   },
 };
 

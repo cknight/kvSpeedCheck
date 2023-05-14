@@ -12,13 +12,10 @@ export async function testUpstashRedis(): Promise<DbPerfRun> {
     return defaultRecord;
   }
 
-  const startRedis = performance.now();
   const upstashRedis = new Redis({
     url: Deno.env.get("UPSTASH_REDIS_URL")!,
     token: Deno.env.get("UPSTASH_REDIS_TOKEN")!,
   });
-  const upstashStartTime = performance.now() - startRedis;
-  console.log("Upstash Redis started in", upstashStartTime, "ms");
 
   // measure write performance
   const startWrite = performance.now();
