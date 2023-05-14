@@ -9,6 +9,8 @@ import { DbPerfRun, DbPerfRunSummary } from "../types.ts";
 
 interface PerfProps {
   measurement: DbPerfRun[];
+  entriesListPerf: number;
+  numberOfEntries: number;
   summary: Map<string, Map<string, DbPerfRunSummary>>;
 }
 
@@ -19,7 +21,9 @@ export const handler: Handlers = {
     const faunaPerf = await testFauna();
 
     const regions = new Map<string, Map<string, DbPerfRunSummary>>();
+    const startEntriesListPerf = performance.now();
     const entries = kv.list({prefix: ["dbPerfRun"]});
+    let numberOfEntries = 0;
     for await (const entry of entries) {
       const statsForRegion = regions.get(entry.value.regionId) || new Map<string, DbPerfRunSummary>();
       const statsForDb = statsForRegion.get(entry.value.dbName) || {
@@ -35,9 +39,11 @@ export const handler: Handlers = {
       statsForDb.atomicWritePerformanceStats.push(entry.value.atomicWritePerformance);
       statsForDb.eventualReadPerformanceStats.push(entry.value.eventualReadPerformance);
       statsForDb.strongReadPerformanceStats.push(entry.value.strongReadPerformance);
+      numberOfEntries++;
     }
+    const entriesListPerf = performance.now() - startEntriesListPerf;
 
-    return await ctx.render({measurement: [denoKvPerf, upstashRedisPerf, faunaPerf], summary: regions});
+    return await ctx.render({measurement: [denoKvPerf, upstashRedisPerf, faunaPerf], entriesListPerf, numberOfEntries, summary: regions});
   },
 };
 
@@ -85,6 +91,7 @@ r      </Head>
         </table>
 
         <p class="mt-10 text-2xl font-bold">All results:</p>
+        <p class="text-xs mt-3">(Deno KV returned and processed {data.data.numberOfEntries} performance entries in {data.data.entriesListPerf}ms using strong consistent reads)</p>
         <div class="mt-5">
           {
             sortedRegions.map(region => <RegionResultTable region={region} summary={summary} />) 
