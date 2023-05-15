@@ -7,7 +7,7 @@ export async function testPlanetscale(): Promise<DbPerfRun> {
   const defaultRecord = getDefaultRecord(dbName);
 
   if (defaultRecord.regionId === "unknown" || await dbMonthlyLimitExceeded(dbName, 10000000)) {
-    //e.g. running locally (don't burn through free tier quota)
+    //e.g. running locally (don't burn through free tier quota) or quota exceeded
     return defaultRecord;
   }
 
