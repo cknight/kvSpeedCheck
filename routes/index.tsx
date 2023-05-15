@@ -3,6 +3,7 @@ import { Handlers, PageProps } from "$fresh/server.ts";
 import RegionResultTable from "../componets/regionResultTable.tsx";
 import { testDenoKv } from "../db/denoKv.ts";
 import { testFauna } from "../db/fauna.ts";
+import { testPlanetscale } from "../db/planetscale.ts";
 import { testUpstashRedis } from "../db/upstashRedis.ts";
 import { kv } from "../db/util.ts";
 import { DbPerfRun, DbPerfRunSummary } from "../types.ts";
@@ -19,6 +20,7 @@ export const handler: Handlers = {
     const denoKvPerf = await testDenoKv();
     const upstashRedisPerf = await testUpstashRedis();
     const faunaPerf = await testFauna();
+    const planetScalePerf = await testPlanetscale();
 
     const regions = new Map<string, Map<string, DbPerfRunSummary>>();
     const startEntriesListPerf = performance.now();
@@ -43,7 +45,7 @@ export const handler: Handlers = {
     }
     const entriesListPerf = performance.now() - startEntriesListPerf;
 
-    return await ctx.render({measurement: [denoKvPerf, upstashRedisPerf, faunaPerf], entriesListPerf, numberOfEntries, summary: regions});
+    return await ctx.render({measurement: [denoKvPerf, upstashRedisPerf, faunaPerf, planetScalePerf], entriesListPerf, numberOfEntries, summary: regions});
   },
 };
 
