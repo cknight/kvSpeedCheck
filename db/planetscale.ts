@@ -1,6 +1,6 @@
 import { DbPerfRun } from "../types.ts";
 import { dbMonthlyLimitExceeded, getDefaultRecord, recordTiming } from "./util.ts";
-import { connect } from "npm:@planetscale/database@^1.4";
+import { connect } from "https://unpkg.com/@planetscale/database@^1.4";
 
 export async function testPlanetscale(): Promise<DbPerfRun> {
   const dbName = "Planetscale";
