@@ -95,19 +95,16 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     ConsistentRead: false
   });
   const warmupTime = performance.now() - startWarmup;
-  console.log("DynamoDB warmup: ", warmupTime);
 
   //write
   const startWrite = performance.now();
   await client.putItem(basicWrite);
   const writeTime = performance.now() - startWrite;
-  console.log("DynamoDB write: ", writeTime);
 
   //eventual read
   const startRead = performance.now();
-  const response = await client.getItem(eventualReadParams);
+  await client.getItem(eventualReadParams);
   const readTime = performance.now() - startRead;
-  console.log("DynamoDB eventual read: ", readTime, JSON.stringify(response));
 
   //transactional write
   const startAtomicWrite = performance.now();
@@ -123,13 +120,11 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     ]
   });
   const atomicWrite = performance.now() - startAtomicWrite;
-  console.log("DynamoDB atomic write: ", atomicWrite);
 
   //single region strong read
   const startStrongRead = performance.now();
-  const strongReadResult = await client.getItem(strongReadParams)
+  await client.getItem(strongReadParams)
   const strongRead = performance.now() - startStrongRead;
-  console.log("DynamoDB strong read: ", strongRead, JSON.stringify(strongReadResult));
 
   const dbPerf: DbPerfRun = {
     dbName: dbName,
