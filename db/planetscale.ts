@@ -1,6 +1,6 @@
 import { DbPerfRun } from "../types.ts";
 import { dbMonthlyLimitExceeded, getDefaultRecord, recordTiming } from "./util.ts";
-import { connect } from "https://unpkg.com/@planetscale/database@^1.4";
+import { Connection, connect } from "https://unpkg.com/@planetscale/database@^1.4";
 
 export async function testPlanetscale(): Promise<DbPerfRun> {
   const dbName = "Planetscale";
@@ -32,7 +32,7 @@ export async function testPlanetscale(): Promise<DbPerfRun> {
 
   //atomic transactional write
   const startAtomic = performance.now();
-  await conn.transaction(async (tx) => {
+  await conn.transaction(async (tx:Connection) => {
     const insert1 = await tx.execute("insert into ID_VALUE (VALUE) values ('WORLD1_transactional')");
     const insert2 = await tx.execute("insert into ID_VALUE (VALUE) values ('WORLD2_transactional')");
     return [insert1, insert2];
