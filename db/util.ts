@@ -1,4 +1,4 @@
-import { DbPerfRun } from "../types.ts";
+import { DbPerfRun, Stats } from "../types.ts";
 
 export const kv = await Deno.openKv();
 
@@ -44,4 +44,25 @@ export function getDefaultRecord(dbName: string): DbPerfRun {
     eventualReadPerformance: -1,
     strongReadPerformance: -1,
   };
+}
+
+export function stats(stats: number[]): Stats {
+  if (stats.length === 0 || stats.includes(-1)) return {
+    min: -1,
+    max: -1,
+    avg: -1,
+    p95: -1,
+  };
+
+  const min = Math.round(Math.min(...stats));
+  const avg = Math.round((stats.reduce((a, b) => a + b, 0) / stats.length));
+  const p95 = Math.round(stats.length > 10 ? stats.sort((a, b) => a - b)[Math.floor(stats.length * 0.95) - 1] : -1);
+  const max = Math.round(Math.max(...stats));
+
+  return {
+    min,
+    max,
+    avg,
+    p95
+  }
 }

@@ -7,7 +7,7 @@ export async function testDenoKv(): Promise<DbPerfRun> {
   await kv.set(["hello"], "world");
   const writePerformance = Date.now() - startWrite;
 
-  //measure write performance
+  //measure atomic/transaction write performance
   const startAtomicWrite = Date.now();
   await kv.atomic().set(["hello"], "world").set(["123"], "456").commit();
   const atomicWritePerformance = Date.now() - startAtomicWrite;

@@ -30,7 +30,7 @@ export async function testFauna(): Promise<DbPerfRun> {
    * Fauna does not support complex transactions via GraphQL API.  However an update mutation can be used instead
    * as it acts as a transaction since it is equivalent to an UPSERT statement and is technically a transaction. 
    * It would be nice to load a transaction into the DB via DQL and then use @relation to reference it (I think?)
-   * however the docs aren't very good and I couldn't easily figure out how to do it.
+   * however the docs aren't very good at all and I couldn't easily figure out how to do it.
    */
   // transaction (imperfect attempt at atomic write)
   const startAtomic = performance.now();

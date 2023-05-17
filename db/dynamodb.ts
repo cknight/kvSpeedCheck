@@ -9,10 +9,10 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
   const dbName = "DynamoDB";
   const defaultRecord = getDefaultRecord(dbName);
 
-  // if (defaultRecord.regionId === "unknown" || await dbMonthlyLimitExceeded(dbName, 100000)) {
-  //   //e.g. running locally (don't burn through free tier quota) or quota exceeded
-  //   return defaultRecord;
-  // }
+  if (defaultRecord.regionId === "unknown" || await dbMonthlyLimitExceeded(dbName, 100000)) {
+    //e.g. running locally (don't burn through free tier quota) or quota exceeded
+    return defaultRecord;
+  }
 
   const accessKey = Deno.env.get("DYNAMODB_ACCESS_KEY");
   const secretKey = Deno.env.get("DYNAMODB_SECRET_ACCESS_KEY");
@@ -83,18 +83,19 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     }
   };
 
-  //warm up (takes 434ms from EU to US)
-  const startWarmup = performance.now();
+  //The first request to DynamoDB incurs a long startup time (cold start), regardless if it is a read or write
+  //To make the comparisons with other DBs more 'fair', we do a dummy read first to warm up the connection
+  //However, really, this is an important consideration and should be taken into account.
+  //warm up (e.g. takes 434ms from EU to US)
   await client.getItem({
     TableName: "EdgeDbCheck",
     Key: {
       id: {
-        S: "Non existent key"
+        S: "Non existent key - warm up only"
       }
     },
     ConsistentRead: false
   });
-  const warmupTime = performance.now() - startWarmup;
 
   //write
   const startWrite = performance.now();
@@ -108,7 +109,7 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
 
   //transactional write
   const startAtomicWrite = performance.now();
-  //Non-sensical transaction which 'put's an item if item with id 001 already exists
+  //Non-sensical transaction which 'put's an item if item with id 004 already exists (which it does)
   await client.transactWriteItems({
     TransactItems: [
       {

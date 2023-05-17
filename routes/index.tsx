@@ -1,6 +1,8 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
+import OperationResultsTables from "../componets/operationResultsTable.tsx";
 import RegionResultTable from "../componets/regionResultTable.tsx";
+import ResultsSelector from "../componets/resultsSelector.tsx";
 import { testDenoKv } from "../db/denoKv.ts";
 import { testDynamoDB } from "../db/dynamodb.ts";
 import { testFauna } from "../db/fauna.ts";
@@ -18,15 +20,13 @@ interface PerfProps {
 
 export const handler: Handlers = {
   async GET(req, ctx) {
-    const denoKvPerf = await testDenoKv();
-    const upstashRedisPerf = await testUpstashRedis();
-    const faunaPerf = await testFauna();
-    const planetScalePerf = await testPlanetscale();
-    const dynamoDbPerf = await testDynamoDB();
 
     const regions = new Map<string, Map<string, DbPerfRunSummary>>();
+      
+    //Get previous runs from all users
     const startEntriesListPerf = performance.now();
-    const entries = kv.list({prefix: ["dbPerfRun"]});
+
+    const entries = kv.list({prefix: ["dbPerfRun"]}, {consistency: "eventual"});
     let numberOfEntries = 0;
     for await (const entry of entries) {
       const statsForRegion = regions.get(entry.value.regionId) || new Map<string, DbPerfRunSummary>();
@@ -45,9 +45,30 @@ export const handler: Handlers = {
       statsForDb.strongReadPerformanceStats.push(entry.value.strongReadPerformance);
       numberOfEntries++;
     }
-    const entriesListPerf = performance.now() - startEntriesListPerf;
 
-    return await ctx.render({measurement: [denoKvPerf, upstashRedisPerf, faunaPerf, planetScalePerf, dynamoDbPerf], entriesListPerf, numberOfEntries, summary: regions});
+    const entriesListPerf = Math.round(performance.now() - startEntriesListPerf);
+
+    //Run new local tests
+    const denoKvPerf = await testDenoKv();
+    const upstashRedisPerf = await testUpstashRedis();
+    const faunaPerf = await testFauna();
+    const planetScalePerf = await testPlanetscale();
+    const dynamoDbPerf = await testDynamoDB();
+
+    //Add new local tests to summary
+    const localPerf = [denoKvPerf, upstashRedisPerf, faunaPerf, planetScalePerf, dynamoDbPerf];
+    for (const run of localPerf) {
+      if (run.eventualReadPerformance === -1 && run.strongReadPerformance === -1) {
+        continue;
+      }
+
+      regions.get(run.regionId)!.get(run.dbName)!.writePerformanceStats.push(run.writePerformance);
+      regions.get(run.regionId)!.get(run.dbName)!.atomicWritePerformanceStats.push(run.atomicWritePerformance);
+      regions.get(run.regionId)!.get(run.dbName)!.eventualReadPerformanceStats.push(run.eventualReadPerformance);
+      regions.get(run.regionId)!.get(run.dbName)!.strongReadPerformanceStats.push(run.strongReadPerformance);
+    }
+
+    return await ctx.render({measurement: localPerf, entriesListPerf, numberOfEntries, summary: regions});
   },
 };
 
@@ -56,7 +77,7 @@ export default function Home(data: PageProps<PerfProps>) {
   const sortedRegions = Array.from(summary.keys()).sort((a, b) => a.localeCompare(b));
   
   function outputPerformance(performance: number): string {
-    return performance >= 0 ? performance + "ms" : "not measured";
+    return performance >= 0 ? performance + "ms" : "-";
   }
 
   return (
@@ -94,8 +115,10 @@ export default function Home(data: PageProps<PerfProps>) {
           </tbody>
         </table>
 
+        <ResultsSelector regions={sortedRegions} />
         <p class="mt-10 text-2xl font-bold">All results:</p>
-        <p class="text-xs mt-3">(Deno KV returned and processed {data.data.numberOfEntries} performance entries in {data.data.entriesListPerf}ms using strong consistent reads)</p>
+        <p class="text-xs mt-3">(Deno KV returned and processed {data.data.numberOfEntries} performance entries in {data.data.entriesListPerf}ms using eventual consistent reads)</p>
+        <OperationResultsTables summary={summary} />
         <div class="mt-5">
           {
             sortedRegions.map(region => <RegionResultTable region={region} summary={summary} />) 
