@@ -9,10 +9,10 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
   const dbName = "DynamoDB";
   const defaultRecord = getDefaultRecord(dbName);
 
-  if (defaultRecord.regionId === "unknown" || await dbMonthlyLimitExceeded(dbName, 100000)) {
-    //e.g. running locally (don't burn through free tier quota) or quota exceeded
-    return defaultRecord;
-  }
+  // if (defaultRecord.regionId === "unknown" || await dbMonthlyLimitExceeded(dbName, 100000)) {
+  //   //e.g. running locally (don't burn through free tier quota) or quota exceeded
+  //   return defaultRecord;
+  // }
 
   const accessKey = Deno.env.get("DYNAMODB_ACCESS_KEY");
   const secretKey = Deno.env.get("DYNAMODB_SECRET_ACCESS_KEY");
@@ -54,7 +54,7 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     ConditionExpression: "attribute_exists(id)",
     Key: {
         id: {
-          S: "001"
+          S: "004"
         }
     }
   };
@@ -75,7 +75,7 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     TableName: "EdgeDbCheck",
     Item: {
       id: {
-        S: "001"
+        S: "005"
       },
       val: {
         S: "Value set at " + Date.now()

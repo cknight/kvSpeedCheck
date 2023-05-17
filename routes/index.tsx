@@ -63,7 +63,7 @@ export default function Home(data: PageProps<PerfProps>) {
     <>
       <Head>
         <title>Edge DB comparison</title>
-r      </Head>
+      </Head>
       <div class="p-4 mx-auto max-w-screen-md">
         <h1 class="mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">Deploy Edge DB comparison</h1>
         <p>Loading this page sent database write and read requests to the below databases.  The requests were sent from a Deno Deploy application running in a Google Cloud Platform (GCP) datacentre.</p>
