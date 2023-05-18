@@ -14,18 +14,6 @@ export default function OperationAndDbResultsTables(props:OpResultsTablesProps) 
   const strongReadSummary = new Map<string, Map<string, Stats>>();
   const dbSet = new Set<string>();
 
-  //delete me
-  const unknownPerf = props.summary.get("unknown")!;
-  props.summary.set('another region', unknownPerf);
-  props.summary.set('another region2', unknownPerf);
-  props.summary.set('another region3', unknownPerf);
-  props.summary.set('another region4', unknownPerf);
-  props.summary.set('another region5', unknownPerf);
-  props.summary.set('another region6', unknownPerf);
-  props.summary.set('another region7', unknownPerf);
-  props.summary.set('another region8', unknownPerf);
-  props.summary.set('another region9', unknownPerf);
-
   for (const [region, dbPerfMap] of props.summary) {
     const dbPerfMapIterable = dbPerfMap.entries();
     for (const [db, dbPerfRun] of dbPerfMapIterable) {
