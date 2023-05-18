@@ -66,3 +66,84 @@ export function stats(stats: number[]): Stats {
     p95
   }
 }
+
+export function regionMapper(region:string):string {
+  switch (region) {
+    case "asia-south1":
+      return "Mumbai";
+    case "asia-south2":
+      return "Delhi";
+    case "asia-east1":
+      return "Taiwan";
+    case "asia-east2":
+      return "Hong Kong";
+    case "asia-northeast1":
+      return "Tokyo";
+    case "asia-northeast2":
+      return "Osaka";
+    case "asia-northeast3":
+      return "Seoul";
+    case "asia-southeast1":
+      return "Singapore";
+    case "asia-southeast2":
+      return "Jakarta";
+    case "australia-southeast1":
+      return "Sydney";
+    case "australia-southeast2":
+      return "Melbourne";
+    case "europe-north1":
+      return "Finland";
+    case "europe-west1":
+      return "Belgium";
+    case "europe-west2":
+      return "London";
+    case "europe-west3":
+      return "Frankfurt";
+    case "europe-west4":
+      return "Netherlands";
+    case "europe-west6":
+      return "Zurich";
+    case "europe-west8":
+      return "Milan";
+    case "europe-west9":
+      return "Paris";
+    case "europe-west12":
+      return "Turin";
+    case "europe-southwest1":
+      return "Madrid";
+    case "europe-central2":
+      return "Warsaw";
+    case "northamerica-northeast1":
+      return "Montreal";
+    case "northamerica-northeast2":
+      return "Toronto";
+    case "southamerica-east1":
+      return "Sao Paulo";
+    case "southamerica-west1":
+      return "Santiago"
+    case "us-central1":
+      return "Iowa";
+    case "us-east1":
+      return "South Carolina";
+    case "us-east4":
+      return "N. Virginia";
+    case "us-east5":
+      return "Ohio";
+    case "us-west1":
+      return "Oregon";
+    case "us-west2":
+      return "Los Angeles";
+    case "us-west3":
+      return "Salt Lake City";
+    case "us-west4":
+      return "Las Vegas";
+    case "us-south1":
+      return "Texas";
+    case "me-west1":
+      return "Tel Aviv";
+    case "me-central1":
+      return "Doha";
+    default:
+      return region;
+  }
+}

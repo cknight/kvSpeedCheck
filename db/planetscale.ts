@@ -3,7 +3,7 @@ import { dbMonthlyLimitExceeded, getDefaultRecord, recordTiming } from "./util.t
 import { Connection, connect } from "https://unpkg.com/@planetscale/database@^1.4";
 
 export async function testPlanetscale(): Promise<DbPerfRun> {
-  const dbName = "Planetscale";
+  const dbName = "PlanetScale";
   const defaultRecord = getDefaultRecord(dbName);
 
   if (defaultRecord.regionId === "unknown" || await dbMonthlyLimitExceeded(dbName, 10000000)) {
@@ -11,7 +11,7 @@ export async function testPlanetscale(): Promise<DbPerfRun> {
     return defaultRecord;
   }
 
-  //issue with address already in use
+  //issue with address already in use?
   
   const dbUrl = Deno.env.get("PLANETSCALE_DB_URL");
   if (!dbUrl) {

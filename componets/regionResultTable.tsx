@@ -1,4 +1,4 @@
-import { stats } from "../db/util.ts";
+import { regionMapper, stats } from "../db/util.ts";
 import { DbPerfRunSummary, Stats } from "../types.ts";
 import RenderStats from "./stats.tsx";
 
@@ -9,8 +9,8 @@ export interface RegionResultTableProps {
 
 export default function RegionResultTable(props: RegionResultTableProps) {
   return (
-    <div id={props.region}>
-      <p class="text-2xl font-bold">{props.region} ({[...props.summary.get(props.region)!.values()][0].writePerformanceStats.length} data points)</p>
+    <div id={regionMapper(props.region)}>
+      <p class="text-2xl font-bold">{regionMapper(props.region)} ({[...props.summary.get(props.region)!.values()][0].writePerformanceStats.length} data points)</p>
       <table class="w-full mt-5 text-left border-b">
         <thead>
           <tr>

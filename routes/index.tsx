@@ -1,6 +1,6 @@
 import { Head } from "$fresh/runtime.ts";
 import { Handlers, PageProps } from "$fresh/server.ts";
-import OperationResultsTables from "../componets/operationResultsTable.tsx";
+import OperationAndDbResultsTables from "../componets/operationResultsTable.tsx";
 import RegionResultTable from "../componets/regionResultTable.tsx";
 import ResultsSelector from "../componets/resultsSelector.tsx";
 import { testDenoKv } from "../db/denoKv.ts";
@@ -8,7 +8,7 @@ import { testDynamoDB } from "../db/dynamodb.ts";
 import { testFauna } from "../db/fauna.ts";
 import { testPlanetscale } from "../db/planetscale.ts";
 import { testUpstashRedis } from "../db/upstashRedis.ts";
-import { kv } from "../db/util.ts";
+import { kv, regionMapper } from "../db/util.ts";
 import { DbPerfRun, DbPerfRunSummary } from "../types.ts";
 
 interface PerfProps {
@@ -29,15 +29,20 @@ export const handler: Handlers = {
     const entries = kv.list({prefix: ["dbPerfRun"]}, {consistency: "eventual"});
     let numberOfEntries = 0;
     for await (const entry of entries) {
+      //Fix incorrect casing of Planetscale
+      const dbName = entry.value.dbName === 'Planetscale' ? 'PlanetScale' : entry.value.dbName;
+      const region = regionMapper(entry.value.regionId);
+
       const statsForRegion = regions.get(entry.value.regionId) || new Map<string, DbPerfRunSummary>();
-      const statsForDb = statsForRegion.get(entry.value.dbName) || {
+      
+      const statsForDb = statsForRegion.get(dbName) || {
         writePerformanceStats: [],
         atomicWritePerformanceStats: [],
         eventualReadPerformanceStats: [],
         strongReadPerformanceStats: [],
       };
       regions.set(entry.value.regionId, statsForRegion);
-      statsForRegion.set(entry.value.dbName, statsForDb);
+      statsForRegion.set(dbName, statsForDb);
 
       statsForDb.writePerformanceStats.push(entry.value.writePerformance);
       statsForDb.atomicWritePerformanceStats.push(entry.value.atomicWritePerformance);
@@ -88,7 +93,7 @@ export default function Home(data: PageProps<PerfProps>) {
       <div class="p-4 mx-auto max-w-screen-md">
         <h1 class="mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">Deploy Edge DB comparison</h1>
         <p>Loading this page sent database write and read requests to the below databases.  The requests were sent from a Deno Deploy application running in a Google Cloud Platform (GCP) datacentre.</p>
-        <p class="mt-8 text-2xl"><span class="font-bold">Your region:</span> GCP - {measurement[0].regionId}</p>
+        <p class="mt-8 text-2xl"><span class="font-bold">Your region:</span> GCP - {regionMapper(measurement[0].regionId)}</p>
         <p class="mt-5 text-2xl font-bold">Your results:</p>
         <table class="w-full mt-5 text-left border-b">
           <thead>
@@ -118,8 +123,8 @@ export default function Home(data: PageProps<PerfProps>) {
         <ResultsSelector regions={sortedRegions} />
         <p class="mt-10 text-2xl font-bold">All results:</p>
         <p class="text-xs mt-3">(Deno KV returned and processed {data.data.numberOfEntries} performance entries in {data.data.entriesListPerf}ms using eventual consistent reads)</p>
-        <OperationResultsTables summary={summary} />
-        <div class="mt-5">
+        <div id="results">
+          <OperationAndDbResultsTables summary={summary} />
           {
             sortedRegions.map(region => <RegionResultTable region={region} summary={summary} />) 
           }
