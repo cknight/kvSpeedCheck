@@ -75,7 +75,7 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     TableName: "EdgeDbCheck",
     Item: {
       id: {
-        S: "005"
+        S: "005-" + crypto.randomUUID()
       },
       val: {
         S: "Value set at " + Date.now()

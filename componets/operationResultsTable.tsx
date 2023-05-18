@@ -27,7 +27,7 @@ export default function OperationAndDbResultsTables(props:OpResultsTablesProps) 
   props.summary.set('another region9', unknownPerf);
 
   for (const [region, dbPerfMap] of props.summary) {
-    for (const [db, dbPerfRun] of dbPerfMap) {
+    dbPerfMap.forEach((dbPerfRun, db) => {
       if (!eventualReadSummary.has(db)) eventualReadSummary.set(db, new Map<string, Stats>());
       if (!writeSummary.has(db)) writeSummary.set(db, new Map<string, Stats>());
       if (!atomicWriteSummary.has(db)) atomicWriteSummary.set(db, new Map<string, Stats>());
@@ -38,7 +38,7 @@ export default function OperationAndDbResultsTables(props:OpResultsTablesProps) 
       writeSummary.get(db)!.set(region, stats(dbPerfRun.writePerformanceStats));
       atomicWriteSummary.get(db)!.set(region, stats(dbPerfRun.atomicWritePerformanceStats));
       strongReadSummary.get(db)!.set(region, stats(dbPerfRun.strongReadPerformanceStats));
-    }
+    });
   }
   const sortedRegions = Array.from(props.summary.keys()).sort((a, b) => a.localeCompare(b));
   const sortedDbs = Array.from(dbSet).sort((a, b) => a.localeCompare(b));
