@@ -89,47 +89,102 @@ export default function Home(data: PageProps<PerfProps>) {
     <>
       <Head>
         <title>Edge DB comparison</title>
+        <style>
+          {`:root {
+            color-scheme: dark;
+          }`}
+        </style>
       </Head>
-      <div class="p-4 mx-auto max-w-screen-md">
-        <h1 class="mb-4 text-3xl font-bold md:text-4xl lg:text-5xl">Deploy Edge DB comparison</h1>
-        <p>Loading this page sent database write and read requests to the below databases.  The requests were sent from a Deno Deploy application running in a Google Cloud Platform (GCP) datacentre.</p>
-        <p class="mt-8 text-2xl"><span class="font-bold">Your region:</span> GCP - {regionMapper(measurement[0].regionId)}</p>
-        <p class="mt-5 text-2xl font-bold">Your results:</p>
-        <table class="w-full mt-5 text-left border-b">
-          <thead>
-            <tr>
-              <th>DB</th>
-              <th>Write</th>
-              <th>Atomic write</th>
-              <th>Eventual read</th>
-              <th>Strong read</th>
-            </tr>
-          </thead>
-          <tbody>
-            {measurement.map(db => {
-              return (
-                <tr class="border-1">
-                  <td>{db.dbName}</td>
-                  <td>{outputPerformance(db.writePerformance)}</td>
-                  <td>{outputPerformance(db.atomicWritePerformance)}</td>
-                  <td>{outputPerformance(db.eventualReadPerformance)}</td>
-                  <td>{outputPerformance(db.strongReadPerformance)}</td>
-                </tr>
-              )
-            })}
-          </tbody>
-        </table>
+      <body class="bg-[#202020] text-gray-100 w-full h-full font-['sans-serif']">
+        <div class="hidden opacity-100 opacity-0"></div>
+        <div class="p-4 mx-auto max-w-screen-md">
+          <img src="/graph.png" alt="Image of a network graph"/>
+          <h1 class="mb-8 mt-8 text-3xl font-bold md:text-4xl lg:text-4xl">Deploy Edge DB comparison</h1>
+          <p class="mb-8">By Chris Knight, 20/05/2023</p>
+          <p class="italic">
+            Deno recently launched a new global database, KV.  In this post, we'll explore and compare a number of global
+            database providers, including KV, looking at latencies, characteristics and ease of use for performing common
+            database interactions.
+          </p>
+          <hr class="w-[50%] m-auto mt-8 mb-8"/>
 
-        <ResultsSelector regions={sortedRegions} />
-        <p class="mt-10 text-2xl font-bold">All results:</p>
-        <p class="text-xs mt-3">(Deno KV returned and processed {data.data.numberOfEntries} performance entries in {data.data.entriesListPerf}ms using eventual consistent reads)</p>
-        <div id="results">
-          <OperationAndDbResultsTables summary={summary} />
-          {
-            sortedRegions.map(region => <RegionResultTable region={region} summary={summary} />) 
-          }
+          <h2 class="mt-8 text-2xl font-bold">Introduction</h2>
+          <p class="mt-3">
+            Before the cloud came along, a typical web application architecture would consist of a web server and a database.
+            These typically were hosted in the same datacentre.  This worked well for application teams (with everything
+            in the same physical location), but not so well for users far away from the datacentre.  The latency for requests
+            to the server could significantly impact the user experience.
+            <img src="/traditional_architecture.png" alt="Traditional architecture diagram" class=""/>
+            To help solve this problem of users far away, a new concept arrived, sometimes referred to as Edge hosting, where your application
+            would be served from multiple global locations with the user being served from the closest location.  This solved
+            one problem of long latencies between the user and the server, however, in some ways actually made the experience
+            worse as all those server to database calls were still going back to the original datacentre which could be far
+            away from the user.
+            <img src="/edge_app_architecture.png" alt="Edge application architecture diagram" class=""/>
+            The next evolution in this journey are edge databases, hosted in multiple datacentres around the world.  By bringing
+            the database closer to the server, the latency for database calls can be significantly reduced.  Hooray!  Problem solved right?
+            Well, not so fast.  It turns out that managing consistent state across databases spread around the world is a seriously hard
+            problem.  There are a number of different approaches to solving this problem, each with tradeoffs. A typical approach to this
+            problem is to have a primary region where all writes are sent to, and then asynchronously replicate those writes to other 
+            regions. Writes can be potentially slower depending on how far away the primary region is from the user.  Depending on the consistency
+            model of the database, you may have two choices:  strong reads which guarantee the most up to date data, but may be slower as these
+            must be done to the primary region, or eventual reads which are faster as they can be read from the database region closest to
+            the server, but may return stale data.
+            <img src="/edge_server_and_db_architecture.png" alt="Edge server and database architecture diagram" class=""/>
+            As you can see the diagram above, if your application can tolerate eventual reads for some or most data, you can potentially save
+            a significant amount of latency by reading from the closest region.  This is the approach that Deno KV takes. 
+          </p>
+
+          <h2 class="mt-8 text-2xl font-bold">The Databases</h2>
+          <p class="mt-3">
+            In this post, we'll be comparing the following databases:
+            
+          </p>
+          <p class="mt-3">
+            Loading this page sent database write and read requests to the below databases.  The requests 
+            were sent from a Deno Deploy application running in a Google Cloud Platform (GCP) datacentre. 
+            Where the operation was sent (e.g. which region the database is in) depends on how the DB provider
+            manages their network. The network latency between you and the Deploy instance is not included 
+            in any figures below.
+          </p>
+          <p class="mt-8 text-2xl"><span class="font-bold">Your Deno Deploy region:</span> GCP - {regionMapper(measurement[0].regionId)}</p>
+          <p class="mt-5 text-2xl font-bold">Your results</p>
+          <table class="w-full mt-5 text-left border-b">
+            <thead>
+              <tr>
+                <th>DB</th>
+                <th>Write</th>
+                <th>Atomic write</th>
+                <th>Eventual read</th>
+                <th>Strong read</th>
+              </tr>
+            </thead>
+            <tbody>
+              {measurement.map(db => {
+                return (
+                  <tr class="border-1">
+                    <td>{db.dbName}</td>
+                    <td>{outputPerformance(db.writePerformance)}</td>
+                    <td>{outputPerformance(db.atomicWritePerformance)}</td>
+                    <td>{outputPerformance(db.eventualReadPerformance)}</td>
+                    <td>{outputPerformance(db.strongReadPerformance)}</td>
+                  </tr>
+                )
+              })}
+            </tbody>
+          </table>
+
+          <p class="mt-10 text-2xl font-bold">All results</p>
+          <p class="text-xs mt-3">(Deno KV returned and processed {data.data.numberOfEntries} performance entries in {data.data.entriesListPerf}ms using eventual consistent reads)</p>
+          <span class="inline">Show results for: <ResultsSelector regions={sortedRegions}/></span>
+          <div id="results" class="mt-5">
+            <OperationAndDbResultsTables summary={summary} />
+            {
+              sortedRegions.map(region => <RegionResultTable region={region} summary={summary} />) 
+            }
+          </div>
         </div>
-      </div>
+      </body>
     </>
   );
 }
