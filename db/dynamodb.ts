@@ -87,6 +87,7 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
   //To make the comparisons with other DBs more 'fair', we do a dummy read first to warm up the connection
   //However, really, this is an important consideration and should be taken into account.
   //warm up (e.g. takes 434ms from EU to US)
+  const startWarmup = performance.now();
   await client.getItem({
     TableName: "EdgeDbCheck",
     Key: {
@@ -96,6 +97,7 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     },
     ConsistentRead: false
   });
+  console.log(`DynamoDB warm up took ${performance.now() - startWarmup}ms`);
 
   //write
   const startWrite = performance.now();

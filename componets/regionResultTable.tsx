@@ -9,7 +9,7 @@ export interface RegionResultTableProps {
 
 export default function RegionResultTable(props: RegionResultTableProps) {
   return (
-    <div id={regionMapper(props.region)} class="transition-opacity duration-300 delay-100 ease-in-out">
+    <div id={regionMapper(props.region)} class="opacity-0 hidden transition-opacity duration-300 delay-100 ease-in-out">
       <p class="text-2xl font-bold">{regionMapper(props.region)} ({[...props.summary.get(props.region)!.values()][0].writePerformanceStats.length} data points)</p>
       <table class="w-full mt-5 text-left border-b">
         <thead>

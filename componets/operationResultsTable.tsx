@@ -61,7 +61,7 @@ export default function OperationAndDbResultsTables(props:OpResultsTablesProps) 
       [...operations].map(operation => {
         return (
           <>
-            <div id={operation.id} class="opacity-0 transition-opacity duration-300 delay-100 ease-in-out">
+            <div id={operation.id} class="opacity-0 hidden transition-opacity duration-800 delay-100 ease-in-out">
               <p class="text-2xl font-bold">{operation.name}</p>
               <div class="overflow-x-scroll">
                 <table class="w-full mt-5 text-left border-b">
