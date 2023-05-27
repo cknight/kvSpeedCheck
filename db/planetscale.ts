@@ -33,8 +33,8 @@ export async function testPlanetscale(): Promise<DbPerfRun> {
   //atomic transactional write
   const startAtomic = performance.now();
   await conn.transaction(async (tx:Connection) => {
-    const insert1 = await tx.execute("insert into ID_VALUE (VALUE) values ('WORLD1_transactional')");
-    const insert2 = await tx.execute("insert into ID_VALUE (VALUE) values ('WORLD2_transactional')");
+    const insert1 = await tx.execute(`insert into ID_VALUE (VALUE) values ('WORLD1_transactional_${crypto.randomUUID()}')`);
+    const insert2 = await tx.execute(`insert into ID_VALUE (VALUE) values ('WORLD2_transactional_${crypto.randomUUID()}')`);
     return [insert1, insert2];
   });
   const atomicTime = performance.now() - startAtomic;
