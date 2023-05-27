@@ -61,22 +61,22 @@ export default function OperationAndDbResultsTables(props:OpResultsTablesProps) 
       [...operations].map(operation => {
         return (
           <>
-            <div id={operation.id} class="opacity-0 hidden transition-opacity duration-800 delay-100 ease-in-out">
+            <div id={operation.id} class="hidden">
               <p class="text-2xl font-bold">{operation.name}</p>
-              <div class="overflow-x-scroll">
-                <table class="w-full mt-5 text-left border-b">
-                  <thead>
+              <div class="mt-5 overflow-x-auto border-1 rounded-md">
+                <table class="min-w-full text-left text-sm font-light bg-[#202020]">
+                  <thead class="border-b font-medium">
                     <tr>
-                      <th class="sticky left-0 z-10 p-3">DB</th>
-                      {[...sortedRegions].map(region => <th class="p-3">{regionMapper(region)}</th>)}
+                      <th class="sticky left-0 z-10 px-6 py-4 bg-[#202525]">DB</th>
+                      {[...sortedRegions].map(region => <th  class="min-w-[100px] bg-[#202525]">{regionMapper(region)}</th>)}
                     </tr>
                   </thead>
                   <tbody>
                     {
                       [...sortedDbs].map(db => {
                         return (
-                          <tr class="border-1">
-                            <td class="sticky left-0 z-10 p-3">{db}</td>
+                          <tr class="border-b">
+                            <td class="font-medium sticky left-0 z-10 whitespace-nowrap px-6 py-4 bg-[#202020]">{db}</td>
                             {
                               [...sortedRegions].map(region => {
                                 return (
@@ -103,23 +103,23 @@ export default function OperationAndDbResultsTables(props:OpResultsTablesProps) 
           <>
             <div id={db.replace(/\s/g,'')}>
               <p class="text-2xl font-bold">{db}</p>
-              <div class="overflow-x-scroll">
-                <table class="w-full mt-5 text-left border-b">
-                  <thead>
+              <div class="mt-5 overflow-x-auto border-1 rounded-md">
+                <table class="min-w-full text-left text-sm font-light bg-[#202020]">
+                  <thead class="border-b font-medium">
                     <tr>
-                      <th class="sticky left-0 z-10 p-3">DB</th>
-                      <th>Write</th>
-                      <th>Atomic write</th>
-                      <th>Eventual read</th>
-                      <th>Strong read</th>
+                      <th class="sticky left-0 z-10 px-6 py-4 bg-[#202c2c]">DB</th>
+                      <th class="min-w-[100px] bg-[#202c2c]">Write</th>
+                      <th class="min-w-[100px] bg-[#202c2c]">Atomic<br/>write</th>
+                      <th class="min-w-[100px] bg-[#202c2c]">Eventual<br/>read</th>
+                      <th class="min-w-[100px] bg-[#202c2c]">Strong<br/>read</th>
                     </tr>
                   </thead>
                   <tbody>
                     {
                       [...sortedRegions].map(region => {
                         return (
-                          <tr class="border-1">
-                            <td class="sticky left-0 z-10 p-3">{regionMapper(region)}</td>
+                          <tr class="border-b">
+                            <td class="sticky left-0 z-10 whitespace-nowrap px-6 py-4 font-medium bg-[#202020]">{regionMapper(region)}</td>
                             <RenderStats stats={writeSummary.get(db)!.get(region)!}/>
                             <RenderStats stats={atomicWriteSummary.get(db)!.get(region)!}/>
                             <RenderStats stats={eventualReadSummary.get(db)!.get(region)!}/>

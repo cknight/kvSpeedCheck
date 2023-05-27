@@ -96,7 +96,7 @@ export default function Home(data: PageProps<PerfProps>) {
         </style>
       </Head>
       <body class="bg-[#202020] text-gray-100 w-full h-full font-['sans-serif']">
-        <div class="hidden opacity-100 opacity-0"></div>
+        <div class="opacity-100 opacity-0"></div>
         <div class="p-4 mx-auto max-w-screen-md">
           <div id="blog" class="hidden">
 
@@ -105,7 +105,7 @@ export default function Home(data: PageProps<PerfProps>) {
             <p class="mb-8">By Chris Knight, 20/05/2023</p>
             <p class="italic">
               Deno recently launched a new global database, KV.  In this post, we'll explore and compare a number of global
-              database providers, including KV, looking at latencies, characteristics and ease of use for performing common
+              database providers, including KV, examining latencies, characteristics and ease of use for performing common
               database interactions.
             </p>
             <hr class="w-[50%] m-auto mt-8 mb-8"/>
@@ -119,11 +119,11 @@ export default function Home(data: PageProps<PerfProps>) {
               <img src="/traditional_architecture.png" alt="Traditional architecture diagram" class=""/>
               To help solve this problem of users far away, a new concept arrived, sometimes referred to as Edge hosting, where your application
               would be served from multiple global locations with the user being served from the closest location.  This solved
-              one problem of long latencies between the user and the server, however, in some ways actually made the experience
-              worse as all those server to database calls were still going back to the original datacentre which could be far
-              away from the user.
+              one problem of long latencies between the user's browser and the server. However, ironically, in some ways this actually 
+              made the experience worse as all those server to database calls were still going back to the original datacentre which 
+              could be far away from the user.
               <img src="/edge_app_architecture.png" alt="Edge application architecture diagram" class=""/>
-              The next evolution in this journey are edge databases, hosted in multiple datacentres around the world.  By bringing
+              The next evolution in this journey are edge (also referred to as global) databases, hosted in multiple datacentres around the world.  By bringing
               the database closer to the server, the latency for database calls can be significantly reduced.  Hooray!  Problem solved right?
               Well, not so fast.  It turns out that managing consistent state across databases spread around the world is a seriously hard
               problem.  There are a number of different approaches to solving this problem, each with tradeoffs. A typical approach to this
@@ -143,43 +143,79 @@ export default function Home(data: PageProps<PerfProps>) {
 
             </p>
           </div>
-          <p class="mt-3">
-            Loading this page sent database write and read requests to the below databases.  The requests 
-            were sent from a Deno Deploy application running in a Google Cloud Platform (GCP) datacentre. 
-            Where the operation was sent (e.g. which region the database is in) depends on how the DB provider
-            manages their network. The network latency between you and the Deploy instance is not included 
-            in any figures below.
-          </p>
-          <p class="mt-8 text-2xl"><span class="font-bold">Your Deno Deploy region:</span> GCP - {regionMapper(measurement[0].regionId)}</p>
-          <p class="mt-5 text-2xl font-bold">Your results</p>
-          <table class="w-full mt-5 text-left border-b">
-            <thead>
-              <tr>
-                <th>DB</th>
-                <th>Write</th>
-                <th>Atomic write</th>
-                <th>Eventual read</th>
-                <th>Strong read</th>
-              </tr>
-            </thead>
-            <tbody>
-              {measurement.map(db => {
-                return (
-                  <tr class="border-1">
-                    <td>{db.dbName}</td>
-                    <td>{outputPerformance(db.writePerformance)}</td>
-                    <td>{outputPerformance(db.atomicWritePerformance)}</td>
-                    <td>{outputPerformance(db.eventualReadPerformance)}</td>
-                    <td>{outputPerformance(db.strongReadPerformance)}</td>
-                  </tr>
-                )
-              })}
-            </tbody>
-          </table>
 
-          <p class="mt-10 text-2xl font-bold">All results</p>
-          <p class="text-xs mt-3">(Deno KV returned and processed {data.data.numberOfEntries} performance entries in {data.data.entriesListPerf}ms using eventual consistent reads)</p>
-          <span class="inline">Show results for: <ResultsSelector regions={sortedRegions}/></span>
+          <h2 class="mt-8 text-2xl font-bold">The Use Case</h2>
+          <p class="mt-3">
+            In order to compare the databases, we need a frame of reference. The one used for this experiment is:
+            <br/><br/>
+            <i>As an experienced web developer, familiar with traditional databases, but new to global/edge databases,
+            you need a database to support your new web application.  Since performance is critical, latency
+            of database requests is very important as your application will do many simple reads and writes, plus some
+            transactions. Your application is hosted on the edge (meaning it will be running on multiple servers around
+            the world, close to your users who live all over the world).
+            </i>
+          </p>
+
+          <h2 class="mt-8 text-2xl font-bold">The Results</h2>
+          <p class="mt-3">
+            Loading this page sent database write and read requests to each database.  The DB operations 
+            were executed from a Deno Deploy application running in the Google Cloud Platform (GCP) 
+            region/datacentre closest to you. Where the read or write operation was sent (i.e. which DB region) depends 
+            on how the DB provider manages their network and what operation was used.
+          </p>
+            
+          <p class="mt-3">
+            All figures represent the time for the database operation to execute including the latency between the server
+            (i.e. Deno Deploy application instance) and the physical database. The network latency between your browser and the 
+            server is not included in any figures below.
+          </p>
+
+          <p class="mt-3">
+            <span class="font-bold text-red-500">Important:</span> The results below should only be interpreted with 
+            an understanding of how the databases are configured and the use case described above.  Different providers 
+            have different numbers of global replicas in different regions which can have a large impact on latency. 
+            Paying more for some databases can give you more replica regions.  Please also carefully read the conclusions 
+            on each DB below to read the results with proper context.
+          </p>
+
+          <p class="mt-8 text-l"><span class="font-bold">Your Deno Deploy region:</span> {regionMapper(measurement[0].regionId)}</p>
+          <p class="mt-5 text-l font-bold">Your results</p>
+          <div class="mt-5 overflow-x-auto border-1 rounded-md">
+            <table class="min-w-full text-left text-sm font-light bg-[#202020]">
+              <thead class="border-b font-medium">
+                <tr>
+                  <th class="sticky left-0 z-10 px-6 py-3 bg-[#202c2c]">DB</th>
+                  <th class="min-w-[100px] bg-[#202c2c]">Write</th>
+                  <th class="min-w-[100px] bg-[#202c2c]">Atomic write</th>
+                  <th class="min-w-[100px] bg-[#202c2c]">Eventual read</th>
+                  <th class="min-w-[100px] bg-[#202c2c]">Strong read</th>
+                </tr>
+              </thead>
+              <tbody>
+                {measurement.map(db => {
+                  return (
+                    <tr class="border-b">
+                      <td class="sticky left-0 z-10 whitespace-nowrap px-6 py-3 font-medium bg-[#202020]">{db.dbName}</td>
+                      <td>{outputPerformance(db.writePerformance)}</td>
+                      <td>{outputPerformance(db.atomicWritePerformance)}</td>
+                      <td>{outputPerformance(db.eventualReadPerformance)}</td>
+                      <td>{outputPerformance(db.strongReadPerformance)}</td>
+                    </tr>
+                  )
+                })}
+              </tbody>
+            </table>
+          </div>
+
+          <p class="mt-10 text-l font-bold">All results</p>
+          <p class="mt-3">
+            Performance results from everyone who has loaded this page are stored in Deno KV.  To compile the data
+            used in the tables below, Deno KV returned and processed {data.data.numberOfEntries} performance entries
+            in {data.data.entriesListPerf}ms using eventual consistent reads.
+          </p>
+          <div class="mt-5">
+            <span class="inline">Show results for: <ResultsSelector regions={sortedRegions}/></span>
+          </div>
           <div id="results" class="mt-5">
             <OperationAndDbResultsTables summary={summary} />
             {
