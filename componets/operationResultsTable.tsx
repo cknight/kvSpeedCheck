@@ -107,7 +107,7 @@ export default function OperationAndDbResultsTables(props:OpResultsTablesProps) 
                 <table class="min-w-full text-left text-sm font-light bg-[#202020]">
                   <thead class="border-b font-medium">
                     <tr>
-                      <th class="sticky left-0 z-10 px-6 py-4 bg-[#202c2c]">DB</th>
+                      <th class="sticky left-0 z-10 px-6 py-4 bg-[#202c2c]">Region</th>
                       <th class="min-w-[100px] bg-[#202c2c]">Write</th>
                       <th class="min-w-[100px] bg-[#202c2c]">Atomic<br/>write</th>
                       <th class="min-w-[100px] bg-[#202c2c]">Eventual<br/>read</th>
