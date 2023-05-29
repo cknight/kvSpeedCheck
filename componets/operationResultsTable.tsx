@@ -29,27 +29,27 @@ export default function OperationAndDbResultsTables(props:OpResultsTablesProps) 
       strongReadSummary.get(db)!.set(region, stats(dbPerfRun.strongReadPerformanceStats));
     }
   }
-  const sortedRegions = Array.from(props.summary.keys()).sort((a, b) => a.localeCompare(b));
+  const sortedRegions = Array.from(props.summary.keys()).sort((a, b) => regionMapper(a).localeCompare(regionMapper(b)));
   const sortedDbs = Array.from(dbSet).sort((a, b) => a.localeCompare(b));
   const operations = [
     {
       id: "eventualReadPerformance",
-      name: "Eventual consistency read perfomance",
+      name: "Eventual consistency read performance",
       summary: eventualReadSummary
     },
     {
       id: "strongReadPerformance",
-      name: "Strong consistency read perfomance",
+      name: "Strong consistency read performance",
       summary: eventualReadSummary
     },
     {
       id: "writePerformance",
-      name: "Write perfomance",
+      name: "Write performance",
       summary: writeSummary
     },
     {
       id: "atomicWritePerformance",
-      name: "Atomic/transaction write perfomance",
+      name: "Atomic/transaction write performance",
       summary: atomicWriteSummary
     }
   ]
