@@ -3,8 +3,6 @@ import { PutItemInput, ConditionCheck, DynamoDB, Put } from 'https://deno.land/x
 import { DbPerfRun } from "../types.ts";
 import { getDefaultRecord,dbMonthlyLimitExceeded,recordTiming } from "./util.ts";
 
-//Transactions are not supported across regions in global tables.
-//Must manually manage regions yourself
 export async function testDynamoDB(): Promise<DbPerfRun> {
   const dbName = "DynamoDB";
   const defaultRecord = getDefaultRecord(dbName);
@@ -83,7 +81,7 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     }
   };
 
-  //The first request to DynamoDB incurs a long startup time (cold start), regardless if it is a read or write
+  //The first request to DynamoDB appears to incur a long startup time (cold start), regardless if it is a read or write
   //To make the comparisons with other DBs more 'fair', we do a dummy read first to warm up the connection
   //However, really, this is an important consideration and should be taken into account.
   //warm up (e.g. takes 434ms from EU to US)
