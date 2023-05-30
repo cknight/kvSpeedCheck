@@ -54,11 +54,9 @@ export const handler: Handlers = {
     const entriesListPerf = Math.round(performance.now() - startEntriesListPerf);
 
     //Run new local tests
-    const denoKvPerf = await testDenoKv();
-    const upstashRedisPerf = await testUpstashRedis();
-    const faunaPerf = await testFauna();
-    const planetScalePerf = await testPlanetscale();
-    const dynamoDbPerf = await testDynamoDB();
+    const [denoKvPerf, upstashRedisPerf, faunaPerf, planetScalePerf, dynamoDbPerf] = await Promise.all([
+      testDenoKv(), testUpstashRedis(), testFauna(), testPlanetscale(), testDynamoDB()
+    ]);
 
     //Add new local tests to summary
     const localPerf = [denoKvPerf, upstashRedisPerf, faunaPerf, planetScalePerf, dynamoDbPerf];
@@ -131,7 +129,7 @@ export default function Home(data: PageProps<PerfProps>) {
               Problem&trade;.  
             </p>
             <p class="mt-3">
-              There are a number of different approaches to solving this problem, each with tradeoffs. A typical approach is to 
+              There are a number of different approaches to solving this problem, each with trade-offs. A typical approach is to 
               have a single primary region where all writes are sent to, and then asynchronously replicate those writes to the databases in other 
               regions (sometimes referred to as replicas). Writes can be potentially slower depending on how far away the primary region is 
               from the user.  Depending on the consistency
@@ -185,8 +183,9 @@ export default function Home(data: PageProps<PerfProps>) {
                 FaunaDB is a serverless NoSQL <a href="https://fauna.com/blog/what-is-a-document-relational-database">document-relational</a>
                 database offering two query languages, Fauna QL (FQL) and GraphQL.  During database creation,   
                 you must choose between two <a href="https://docs.fauna.com/fauna/current/learn/understanding/region_groups">region groups</a> to host your 
-                database: US or Europe.  Data is replicated to 3 geographic regions within the region group, but never outside that region 
-                group. For this experiment the US region group was chosen.  Fauna does not appear offer true global replication.
+                database: US or Europe.  Data is replicated to 3 geographic regions within the region group (i.e. US or Europe), but never outside that region 
+                group. For this experiment the US region group was chosen.  True global replication is possible (e.g. hosting in US, Europe and Aisa)
+                but only for enterprise customers through their Virtual Private Fauna offering.
               </p>
               <p class="mt-3">
                 FaunaDB offers strong consistency for all reads and writes as well as supporting ACID transactions.  Despite being a NoSQL
@@ -195,30 +194,14 @@ export default function Home(data: PageProps<PerfProps>) {
               <h3 class="mt-3 text-xl font-bold">
                 <svg class="inline mr-3 w-8" viewBox="-16.5 0 289 289" preserveAspectRatio="xMidYMid">
                   <g>
-                    <path d="M165.258,288.501 L168.766,288.501 L226.027,259.867 L226.98,258.52 L226.98,29.964 L226.027,28.61 L168.766,0 L165.215,0 L165.258,288.501" fill="#5294CF">
-
-                </path>
-                    <path d="M90.741,288.501 L87.184,288.501 L29.972,259.867 L28.811,257.87 L28.222,31.128 L29.972,28.61 L87.184,0 L90.785,0 L90.741,288.501" fill="#1F5B98">
-
-                </path>
-                    <path d="M87.285,0 L168.711,0 L168.711,288.501 L87.285,288.501 L87.285,0 Z" fill="#2D72B8">
-
-                </path>
-                    <path d="M256,137.769 L254.065,137.34 L226.437,134.764 L226.027,134.968 L168.715,132.676 L87.285,132.676 L29.972,134.968 L29.972,91.264 L29.912,91.296 L29.972,91.168 L87.285,77.888 L168.715,77.888 L226.027,91.168 L247.096,102.367 L247.096,95.167 L256,94.193 L255.078,92.395 L226.886,72.236 L226.027,72.515 L168.715,54.756 L87.285,54.756 L29.972,72.515 L29.972,28.61 L0,63.723 L0,94.389 L0.232,94.221 L8.904,95.167 L8.904,102.515 L0,107.28 L0,137.793 L0.232,137.769 L8.904,137.897 L8.904,150.704 L1.422,150.816 L0,150.68 L0,181.205 L8.904,185.993 L8.904,193.426 L0.373,194.368 L0,194.088 L0,224.749 L29.972,259.867 L29.972,215.966 L87.285,233.725 L168.715,233.725 L226.196,215.914 L226.96,216.249 L254.781,196.387 L256,194.408 L247.096,193.426 L247.096,186.142 L245.929,185.676 L226.886,195.941 L226.196,197.381 L168.715,210.584 L168.715,210.6 L87.285,210.6 L87.285,210.584 L29.972,197.325 L29.972,153.461 L87.285,155.745 L87.285,155.801 L168.715,155.801 L226.027,153.461 L227.332,154.061 L254.111,151.755 L256,150.832 L247.096,150.704 L247.096,137.897 L256,137.769" fill="#1A476F">
-
-                </path>
-                    <path d="M226.027,215.966 L226.027,259.867 L256,224.749 L256,194.288 L226.2,215.914 L226.027,215.966" fill="#2D72B8">
-
-                </path>
-                    <path d="M226.027,197.421 L226.2,197.381 L256,181.353 L256,150.704 L226.027,153.461 L226.027,197.421" fill="#2D72B8">
-
-                </path>
-                    <path d="M226.2,91.208 L226.027,91.168 L226.027,134.968 L256,137.769 L256,107.135 L226.2,91.208" fill="#2D72B8">
-
-                </path>
-                    <path d="M226.2,72.687 L256,94.193 L256,63.731 L226.027,28.61 L226.027,72.515 L226.2,72.575 L226.2,72.687" fill="#2D72B8">
-
-                </path>
+                    <path d="M165.258,288.501 L168.766,288.501 L226.027,259.867 L226.98,258.52 L226.98,29.964 L226.027,28.61 L168.766,0 L165.215,0 L165.258,288.501" fill="#5294CF"></path>
+                    <path d="M90.741,288.501 L87.184,288.501 L29.972,259.867 L28.811,257.87 L28.222,31.128 L29.972,28.61 L87.184,0 L90.785,0 L90.741,288.501" fill="#1F5B98"></path>
+                    <path d="M87.285,0 L168.711,0 L168.711,288.501 L87.285,288.501 L87.285,0 Z" fill="#2D72B8"></path>
+                    <path d="M256,137.769 L254.065,137.34 L226.437,134.764 L226.027,134.968 L168.715,132.676 L87.285,132.676 L29.972,134.968 L29.972,91.264 L29.912,91.296 L29.972,91.168 L87.285,77.888 L168.715,77.888 L226.027,91.168 L247.096,102.367 L247.096,95.167 L256,94.193 L255.078,92.395 L226.886,72.236 L226.027,72.515 L168.715,54.756 L87.285,54.756 L29.972,72.515 L29.972,28.61 L0,63.723 L0,94.389 L0.232,94.221 L8.904,95.167 L8.904,102.515 L0,107.28 L0,137.793 L0.232,137.769 L8.904,137.897 L8.904,150.704 L1.422,150.816 L0,150.68 L0,181.205 L8.904,185.993 L8.904,193.426 L0.373,194.368 L0,194.088 L0,224.749 L29.972,259.867 L29.972,215.966 L87.285,233.725 L168.715,233.725 L226.196,215.914 L226.96,216.249 L254.781,196.387 L256,194.408 L247.096,193.426 L247.096,186.142 L245.929,185.676 L226.886,195.941 L226.196,197.381 L168.715,210.584 L168.715,210.6 L87.285,210.6 L87.285,210.584 L29.972,197.325 L29.972,153.461 L87.285,155.745 L87.285,155.801 L168.715,155.801 L226.027,153.461 L227.332,154.061 L254.111,151.755 L256,150.832 L247.096,150.704 L247.096,137.897 L256,137.769" fill="#1A476F"></path>
+                    <path d="M226.027,215.966 L226.027,259.867 L256,224.749 L256,194.288 L226.2,215.914 L226.027,215.966" fill="#2D72B8"></path>
+                    <path d="M226.027,197.421 L226.2,197.381 L256,181.353 L256,150.704 L226.027,153.461 L226.027,197.421" fill="#2D72B8"></path>
+                    <path d="M226.2,91.208 L226.027,91.168 L226.027,134.968 L256,137.769 L256,107.135 L226.2,91.208" fill="#2D72B8"></path>
+                    <path d="M226.2,72.687 L256,94.193 L256,63.731 L226.027,28.61 L226.027,72.515 L226.2,72.575 L226.2,72.687" fill="#2D72B8"></path>
                   </g>
                 </svg>DynamoDB</h3>
               <p class="mt-3">
@@ -227,7 +210,7 @@ export default function Home(data: PageProps<PerfProps>) {
                 setup, you can enable "global tables" which creates identical tables in additional regions (in as many regions as you like). Strong
                 consistency is offered within a single region only but not for secondary indexes.  Global tables are eventually consistent 
                 with each other.  DynamoDB also supports ACID transactions, but only within a single region.  Transactions are not ACID 
-                compliant when replicating to other regions.
+                compliant when replicating to other regions.  DynamoDB also integrates extremely well with other AWS services.
               </p>
               <h3 class="mt-3 text-xl font-bold">
               <svg class="inline w-6 mr-3" viewBox="0 0 256 341" version="1.1" preserveAspectRatio="xMidYMid">
