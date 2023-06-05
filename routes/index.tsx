@@ -95,7 +95,7 @@ export default function Home(data: PageProps<PerfProps>) {
       </Head>
       <body class="bg-[#202020] text-gray-100 w-full h-full font-['proxima-nova, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, sans-serif']">
         <div class="opacity-100 opacity-0"></div>
-        <div class="p-4 mx-auto max-w-screen-md">
+        <div class="p-4 mx-auto max-w-screen-md font-light">
           <div id="blog" class="hidden">
 
             <img src="/graph.png" alt="Image of a network graph"/>
@@ -211,9 +211,9 @@ export default function Home(data: PageProps<PerfProps>) {
               </p>
               <h3 class="mt-3 text-xl font-bold">
               <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42.3 47" class="w-8 inline mr-3"><path style="fill:#813eef" d="M32.9 9.9c-2.9 1-4.3 2.7-5.3 5.4-.2.7-.9 1.5-1.6 2.1l2.4 2.6-7.6-5.3L0 0s1.5 9.8 2 13.4c.4 2.5 1 3.7 3 4.8l.8.4 3.4 1.8-2-1.1 9.4 5.2-.1.1L6.4 20c.5 1.8 1.6 5.4 2 7 .5 1.7 1 2.3 2.7 2.9l3 1.1 1.9-.7-2.4 1.6L1.7 47c7.9-7.4 14.6-10 19.5-12.1 6.3-2.7 10-4.5 12.5-10.7 1.8-4.4 3.1-10 4.9-12.2l3.7-4.7c0-.1-7.6 2-9.4 2.6z"></path></svg>
-                FaunaDB</h3>
+                Fauna</h3>
               <p class="mt-3">
-                FaunaDB is a serverless NoSQL <a href="https://fauna.com/blog/what-is-a-document-relational-database">document-relational</a>
+                Fauna is a serverless NoSQL <a href="https://fauna.com/blog/what-is-a-document-relational-database">document-relational</a>
                 database offering two query languages, Fauna QL (FQL) and GraphQL.  During database creation,   
                 you must choose between two <a href="https://docs.fauna.com/fauna/current/learn/understanding/region_groups">region groups</a> to host your 
                 database: US or Europe.  Data is replicated to 3 geographic regions within the region group (i.e. US or Europe), but never outside that region 
@@ -221,7 +221,7 @@ export default function Home(data: PageProps<PerfProps>) {
                 but only for enterprise customers through their Virtual Private Fauna offering.
               </p>
               <p class="mt-3">
-                FaunaDB offers strong consistency for all reads and writes as well as supporting ACID transactions.  Both Deno KV and Fauna provide
+                Fauna offers strong consistency for all reads and writes as well as supporting ACID transactions.  Both Deno KV and Fauna provide
                 the strongest consistency model of the databases in the experiment. Despite being a NoSQL
                 database, a strength of Fauna is its relational database capabilities such as normalisation, joins and indexes.
               </p>
@@ -296,7 +296,7 @@ export default function Home(data: PageProps<PerfProps>) {
                     <tr>
                       <th class="sticky left-0 z-100 px-6 py-3 bg-[#202c2c]">Database</th>
                       <th class="min-w-[100px] bg-[#202c2c]">Type</th>
-                      <th class="min-w-[100px] bg-[#202c2c]">Regions configured (* primary)</th>
+                      <th class="min-w-[100px] bg-[#202c2c]">Regions configured<br/>(* primary)</th>
                       <th class="min-w-[100px] bg-[#202c2c]">Read consistency</th>
                       <th class="min-w-[100px] bg-[#202c2c]">Query model</th>
                       <th class="min-w-[100px] bg-[#202c2c]">Transactions</th>
@@ -432,21 +432,199 @@ export default function Home(data: PageProps<PerfProps>) {
 
           <div id="analysis">&nbsp;</div>
           <h2 class="text-2xl font-bold">Analysis</h2>
-          <p class="mt-3">
-            Setup/Configuration
-            Local development
-            Ease of Use
+          <h3 class="mt-3 text-xl font-bold">
+                <svg class="inline mr-3 text-default h-10 flex-none dark:text-gray-900" viewBox="0 0 30 30" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Deno Logo"><g clip-path="url(#clip0_29_599)"><path d="M15 0C23.2843 0 30 6.71572 30 15C30 23.2843 23.2843 30 15 30C6.71572 30 0 23.2843 0 15C0 6.71572 6.71572 0 15 0Z" fill="currentColor"></path><path d="M14.6635 22.3394C14.2788 22.2357 13.8831 22.4584 13.7705 22.8381L13.7655 22.8558L12.7694 26.5472L12.7649 26.565C12.6711 26.9498 12.9011 27.3414 13.2858 27.4451C13.6704 27.549 14.0661 27.3263 14.1787 26.9465L14.1837 26.9289L15.1797 23.2375L15.1843 23.2196C15.1911 23.1919 15.1962 23.164 15.1997 23.1362L15.2026 23.1084L15.179 22.9888L15.1445 22.8166L15.1227 22.7091C15.076 22.619 15.0111 22.5396 14.932 22.4759C14.853 22.4123 14.7615 22.3658 14.6635 22.3394ZM7.7224 18.5379C7.70424 18.5741 7.68883 18.6123 7.67658 18.6522L7.66967 18.6763L6.67358 22.3677L6.669 22.3856C6.57525 22.7704 6.80524 23.1619 7.1899 23.2657C7.57451 23.3695 7.97026 23.1469 8.08287 22.7671L8.08779 22.7494L8.99096 19.4023C8.51793 19.1518 8.09336 18.8628 7.7224 18.5379ZM5.34707 14.2929C4.9624 14.1891 4.56666 14.4117 4.4541 14.7915L4.44912 14.8092L3.45303 18.5006L3.44846 18.5184C3.35471 18.9032 3.58469 19.2947 3.96936 19.3985C4.35397 19.5023 4.74971 19.2797 4.86232 18.8999L4.86725 18.8822L5.86334 15.1908L5.86791 15.173C5.96166 14.7882 5.73174 14.3967 5.34707 14.2929ZM27.682 13.4546C27.2973 13.3508 26.9015 13.5734 26.789 13.9532L26.784 13.9709L25.7879 17.6623L25.7833 17.6801C25.6896 18.0649 25.9196 18.4564 26.3042 18.5602C26.6889 18.664 27.0846 18.4414 27.1972 18.0616L27.2021 18.0439L28.1982 14.3525L28.2028 14.3347C28.2965 13.9499 28.0666 13.5584 27.682 13.4546ZM3.17781 8.52527C2.34361 10.0444 1.81243 11.7112 1.61377 13.4329C1.7088 13.5412 1.83381 13.619 1.97301 13.6563C2.35768 13.7602 2.75342 13.5375 2.86598 13.1577L2.87096 13.1401L3.86705 9.44865L3.87162 9.43084C3.96537 9.04599 3.73539 8.65447 3.35072 8.5507C3.2943 8.53547 3.23623 8.52694 3.17781 8.52527ZM25.159 8.5507C24.7744 8.44687 24.3786 8.66953 24.266 9.04933L24.2611 9.06697L23.265 12.7584L23.2604 12.7762C23.1667 13.161 23.3966 13.5526 23.7813 13.6563C24.1659 13.7602 24.5617 13.5375 24.6743 13.1577L24.6792 13.1401L25.6753 9.44865L25.6799 9.43084C25.7736 9.04599 25.5436 8.65447 25.159 8.5507Z" fill="white"></path><path d="M7.51285 5.04065C7.12824 4.93682 6.73249 5.15948 6.61988 5.53929L6.61495 5.55692L5.61886 9.24833L5.61429 9.26614C5.52054 9.65098 5.75052 10.0425 6.13519 10.1463C6.5198 10.2501 6.91554 10.0274 7.02816 9.64764L7.03308 9.63001L8.02917 5.9386L8.03374 5.92079C8.12749 5.53595 7.89751 5.14442 7.51285 5.04065ZM20.3116 5.73845C19.9269 5.63462 19.5312 5.85727 19.4186 6.23708L19.4136 6.25471L18.7443 8.73499C19.1779 8.94915 19.5917 9.20126 19.9809 9.48839L20.0453 9.53643L20.8279 6.63639L20.8324 6.61858C20.9262 6.23374 20.6963 5.84221 20.3116 5.73845ZM13.7968 1.57642C13.3296 1.61771 12.8647 1.68338 12.4043 1.77317L12.3066 1.79263L11.3782 5.23419L11.3736 5.252C11.2799 5.63684 11.5099 6.02837 11.8945 6.13214C12.2792 6.23596 12.6749 6.01331 12.7875 5.6335L12.7924 5.61587L13.7885 1.92446L13.7931 1.90665C13.8196 1.79831 13.8209 1.68533 13.7968 1.57642ZM22.9626 4.1263L22.7669 4.85169L22.7623 4.86944C22.6686 5.25429 22.8986 5.64581 23.2832 5.74958C23.6678 5.85341 24.0636 5.63075 24.1762 5.25095L24.1811 5.23331L24.2025 5.15462C23.8362 4.81205 23.4511 4.49009 23.0491 4.19022L22.9626 4.1263ZM17.1672 1.69677L16.8139 3.00593L16.8094 3.02374C16.7156 3.40858 16.9456 3.80011 17.3303 3.90388C17.7149 4.0077 18.1106 3.78505 18.2233 3.40524L18.2282 3.38761L18.6 2.00966C18.1624 1.88867 17.719 1.79001 17.2714 1.71405L17.1672 1.69677Z" fill="white"></path><path d="M9.69085 24.6253C9.80341 24.2455 10.1992 24.0229 10.5838 24.1266C10.9685 24.2303 11.1984 24.6219 11.1047 25.0068L11.1001 25.0246L10.3872 27.6664L10.2876 27.6297C9.85836 27.4694 9.43765 27.2873 9.0271 27.0839L9.68587 24.6429L9.69085 24.6253Z" fill="white"></path><path d="M14.4141 8.49082C10.0522 8.49082 6.65918 11.2368 6.65918 14.6517C6.65918 17.8769 9.78123 19.9362 14.6211 19.8331C15.0327 19.8243 15.1517 20.1008 15.2856 20.4734C15.4196 20.846 15.7796 22.8097 16.0665 24.3117C16.3233 25.656 16.5842 27.0052 16.7834 28.3596C19.9439 27.9418 22.8663 26.3807 25.0076 24.0261L22.7237 15.5088C22.1544 13.4518 21.489 11.5564 19.7283 10.1794C18.3118 9.07166 16.5122 8.49082 14.4141 8.49082Z" fill="white"></path><path d="M15.3516 10.957C15.8694 10.957 16.2891 11.3767 16.2891 11.8945C16.2891 12.4123 15.8694 12.832 15.3516 12.832C14.8338 12.832 14.4141 12.4123 14.4141 11.8945C14.4141 11.3767 14.8338 10.957 15.3516 10.957Z" fill="currentColor"></path></g><defs><clipPath id="clip0_29_599"><rect width="30" height="30" fill="white"></rect></clipPath></defs></svg>
+                Deno KV
+          </h3>
+          <div class="mt-4">
+            <table class="text-left bg-[#202020]">
+              <thead class="border-b font-medium">
+                <tr>
+                  <th class="sticky w-56 left-0 z-10 px-6 py-3 bg-[#202c2c]">Metric</th>
+                  <th class="min-w-[100px] bg-[#202c2c]">Rating</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Setup/Configuration</td>
+                  <td><span class="text-yellow-500">★★★★★</span></td>
+                </tr>
+                <tr>
+                  <td>Local development</td>
+                  <td><span class="text-yellow-500">★★★★☆</span></td>
+                </tr>
+                <tr>
+                  <td>Global distribution</td>
+                  <td><span class="text-yellow-500">★★★★☆</span></td>
+                </tr>
+                <tr>
+                  <td>Ease of use</td>
+                  <td><span class="text-yellow-500">★★★★☆</span></td>
+                </tr>
+                <tr>
+                  <td>Performance</td>
+                  <td><span class="text-yellow-500">★★★★★</span></td>
+                </tr>
+                <tr>
+                  <td>Consistency</td>
+                  <td><span class="text-yellow-500">★★★★★</span></td>
+                </tr>
+                <tr>
+                  <td>Features/Flexibility</td>
+                  <td><span class="text-yellow-500">★★★☆☆</span></td>
+                </tr>
+                <tr>
+                  <td>Vendor independence</td>
+                  <td><span class="text-yellow-500">★☆☆☆☆</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="mt-3">
+              <span class="font-bold">Setup/Configuration: </span>Deno KV easily tops the bunch when it comes to setup and configuration, simply because there is none.  You do not have to 
+              create a database, manage connection strings, create credentials, choose regions, manage usernames and passwords, or anything else.
+              You literally just start coding with it.  Getting started with KV was significantly faster and easier than any of 
+              the other solutions.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Local development: </span>Local development is also very easy, again there is no setup.  In production, you are using a distributed database built
+              on FoundationDB, however locally you are using a SQLite database auto-created for you with the exact same API and code.  
+              There's nothing you need to do between development and production setup.  It just works.  One downside is you will need to 
+              create scripts to populate data or share data across developer machines.
+              Each branch build in Deno Deploy gets their own instance of a KV store, so you can test your branch 
+              builds in isolation, however you may need to manually populate data into the new KV stores.  Manual work
+              to manage and delete these branch build KV stores may also be required if they contribute to storage costs.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Global distribution: </span>With database replicas on 3 continents, KV counts as being a truly global database.  However, there is no configuration to let
+              you customise where these replicas are, nor which is the primary replica (currently US only).  The Deno team have hinted they
+              are looking at adding additional replicas.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Ease of use: </span>Ease of use also scored very high.  The API is simple and intuitive and the nascent documentation is decent. Where Deno KV
+              is less user friendly is the manual management required for secondary indexes.  You must manually create and carefully manage
+              these. It's not overly difficult, but neither is it handled automatically for you.  KV's approach to keys, built from various
+              parts, allows for nice flexibility of modelling your data, within the confines of a key-value database, as well as good ability
+              to do range searches.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Performance: </span>KV is impressively fast.  Strongly consistent read, write performance and transactions are all either the fastest or very close 
+              to the fastest measured in any region of the databases tested.  Eventual read performance is also very fast, 
+              second only to Upstash Redis which has more global replicas configured.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Consistency: </span>KV is strongly consistent, up there with Fauna as the most consistent database tested.  However, unlike Fauna, KV has the nice
+              option of allowing eventual reads for faster access in use cases where strong consistency is not required.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Features/Flexibility: </span>Features and flexibility are one of KV's weakest points.  Like all key-value stores, KV is not best suited to highly relational
+              data.  There are no backup capabilities, data streaming, security configuration, or other advanced features.
+              Additionally, of the key-value stores out there, KV has fairly restrictive limits on key length (2kb) and value length (64kb),
+              making it unsuitable for some types of data.  Finally, there is currently a limit of 10 operations per transaction. While this
+              may not seem restrictive at first glance, any operations on an index also need to potentially update secondary indexes at the 
+              same time as well. Thus if you have 3 secondary indexes, you may limited to only 7 operations in a transaction (including 
+              updating the 3 secondary indexes) to maintain consistency.  Finally, as a beta product, KV lacks maturity in dashboard 
+              tooling and the ability to export and import data as well as wiping a database.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Vendor independence: </span>Finally, KV's weakest point is perhaps it's vendor lock-in.  As a globally distributed database, KV is only (currently) available in Deno 
+              Deploy.  While you can deploy your Deno app yourself to any server and use the KV API with a local SQLite database, you will not 
+              get global distribution of your data.  Deno also has a custom API meaning you cannot simply swap out KV for another database if
+              in the future you migrate off of Deploy or away from KV.  That said, the API is very simple so migrations may not be overly 
+              difficult.
+            </p>
+          </div>
+          <h3 class="mt-3 text-xl font-bold">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42.3 47" class="w-8 inline mr-3"><path style="fill:#813eef" d="M32.9 9.9c-2.9 1-4.3 2.7-5.3 5.4-.2.7-.9 1.5-1.6 2.1l2.4 2.6-7.6-5.3L0 0s1.5 9.8 2 13.4c.4 2.5 1 3.7 3 4.8l.8.4 3.4 1.8-2-1.1 9.4 5.2-.1.1L6.4 20c.5 1.8 1.6 5.4 2 7 .5 1.7 1 2.3 2.7 2.9l3 1.1 1.9-.7-2.4 1.6L1.7 47c7.9-7.4 14.6-10 19.5-12.1 6.3-2.7 10-4.5 12.5-10.7 1.8-4.4 3.1-10 4.9-12.2l3.7-4.7c0-.1-7.6 2-9.4 2.6z"></path></svg>
+              Fauna
+          </h3>
+          <div class="mt-4">
+            <table class="text-left bg-[#202020]">
+              <thead class="border-b font-medium">
+                <tr>
+                  <th class="sticky w-56 left-0 z-10 px-6 py-3 bg-[#202c2c]">Metric</th>
+                  <th class="min-w-[100px] bg-[#202c2c]">Rating</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Setup/Configuration</td>
+                  <td><span class="text-yellow-500">★★★☆☆</span></td>
+                </tr>
+                <tr>
+                  <td>Local development</td>
+                  <td><span class="text-yellow-500">★★★★☆</span></td>
+                </tr>
+                <tr>
+                  <td>Global distribution</td>
+                  <td><span class="text-yellow-500">★★☆☆☆</span></td>
+                </tr>
+                <tr>
+                  <td>Ease of use</td>
+                  <td><span class="text-yellow-500">★★☆☆☆</span></td>
+                </tr>
+                <tr>
+                  <td>Performance</td>
+                  <td><span class="text-yellow-500">★★★★☆</span></td>
+                </tr>
+                <tr>
+                  <td>Consistency</td>
+                  <td><span class="text-yellow-500">★★★★★</span></td>
+                </tr>
+                <tr>
+                  <td>Features/Flexibility</td>
+                  <td><span class="text-yellow-500">★★★★★</span></td>
+                </tr>
+                <tr>
+                  <td>Vendor independence</td>
+                  <td><span class="text-yellow-500">★★☆☆☆</span></td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="mt-3">
+              <span class="font-bold">Setup/Configuration: </span>Creating a Fauna database is straightforward via their web UI.  Once the database is created you need to create a Collection,
+              similar to a table in a traditional database, via the UI, in their DB specific Fauna Query Language (FQL) or via their GraphQL API.
+              You can also add a GraphQL schema to your Collection.  Finally, you need to create a security key to access your database via the 
+              javascript client or http POST request.  While nothing was overly difficult, the process was not as simple as other databases 
+              and there is a lot of new terminology to learn.  There are almost no examples of using Fauna with Deno.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Local development: </span>For local development, Fauna offers a docker container to run a local instance of Fauna which must be installed and given minor
+              configuration to run.  You can run it with persisted data or start with a clean sheet. 
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Global distribution: </span>Fauna bills itself as a multi-region distributed database.  However, without upgrading to their enterprise plan (which gets you VM isolated
+              single tenant customised deployments anywhere you want), you are limited to either Western centric US or Europe region groups (but not a mixture).  With the region
+              group, there will be 3 replicas of your data within the region group.  Speaking with their support, changes are coming to offer
+              an expanded global offering. As of now, however, this may not be ideal if your primary user base is in Asia for example.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Ease of use: </span>Fauna had the steepest learning curve of the databases reviewed, however, if you already know GraphQL this will help.
+              Fauna's FQL is a powerful language but as a custom built API takes time to learn.  The documentation on the website is OK but lacking
+              at times.  It will take considerable time to become comfortable with Fauna as conceptually it is very different to other databases.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Performance: </span>Performance wise, Fauna held its ground well, despite being limited to a single region group.  Writes were slow compared to the other
+              databases, but strong reads were fast, though as Fauna does not offer eventual consistency reads other databases can outperform Fauna if
+              eventual consistency is acceptable.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Consistency: </span>Fauna, like KV, offers very strong consistency but as mentioned previously there is no option for eventual read consistency.  This is likely
+              due to the fact that Fauna is an active-active database where writes only complete after replication to all replicas.  Everything in Fauna
+              is a transaction. 
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Features/Flexibility: </span>Where Fauna really shines is in it's features and flexibility.  If you invest the time to properly learn Fauna, it will reward you with 
+              capabilities not found in other NoSQL databases such as joins, indexes, normalised data, SQL like queries, functions (which 
+              are similar to stored procedures), data streaming, backups, temporality (reading data as it was at a point in time), and more.
+            </p>
+            <p class="mt-3">
+              <span class="font-bold">Vendor independence: </span>Fauna is a proprietary database with a custom API and many features.  Once your application is deeply embedded into Fauna migrating
+              to another database will be difficult and costly.  On the plus side, unlike KV you can take your Fauna database with you to another 
+              edge platform.
+            </p>
+          </div>
 
-
-            Deno KV has the smallest limits of the databases tested (2kb for keys, 64kb for values).
-            Vendor lock-in as this can only be used in Deno Deploy.
-
-            Fauna's region groups currently limit you to Western-centric database hosting, meaning your DB is either only replicated
-            within the US or within Europe.  Latencies within Asia, for example, are poor.  An enterprise customer could setup a Private Virtual Fauna
-            global database, but maintaining strong consistency globally could be expensive from a latency point of view.  Pricing is also
-            <a href="https://docs.fauna.com/fauna/current/learn/understanding/billing">highly complex</a> needing an entire blog post to walk
-            through the 6 dimensions involved.  Running a local Fauna DB is not simple either.
-
+            
             DynamoDB's master-master global tables are prone to data loss if concurrent writes to the same data occur in multiple regions.
             DynamoDB offers no routing or latency management, so you must manage this yourself.  In other words, application logic is 
             required to determine which region to route the request to (as well as handle region outages), whereas all other providers 
@@ -457,7 +635,6 @@ export default function Home(data: PageProps<PerfProps>) {
             console before it accepts connections again.
             No automatic sharding requiring manual monitoring and intervention.
             Though MySQL compatible, there are no foreign key constraints.  Instead, such constraints need to be implemented in application logic.
-          </p>
 
           <div id="conclusions">&nbsp;</div>
           <h2 class="text-2xl font-bold">Conclusions</h2>
