@@ -27,12 +27,14 @@ export async function testFauna(): Promise<DbPerfRun> {
   const readTime = performance.now() - startRead;
 
   /**
-   * Fauna does not support complex transactions via GraphQL API.  However an update mutation can be used instead
-   * as it acts as a transaction since it is equivalent to an UPSERT statement and is technically a transaction. 
-   * It would be nice to load a transaction into the DB via DQL and then use @relation to reference it (I think?)
-   * however the docs aren't very good at all and I couldn't easily figure out how to do it.
+   * Fauna does not support complex transactions natively via GraphQL API.  Technically speaking, all
+   * operations in Fauna are transactions.  Ideally it would be nice to load a transaction into the 
+   * DB via DQL and then use @relation to reference it (I think?) however the docs aren't very good 
+   * at all and I couldn't easily figure out how to do it.
+   * 
+   * Instead, we use an update mutation to update the record for something different than a standard write.
    */
-  // transaction (imperfect attempt at atomic write)
+  // transaction 
   const startAtomic = performance.now();
   await queryFauna(token, "mutation UpdateTodoUsingTransaction{updateTodo(id: \"364525682591531088\",data: {title: \"Hello\" desc: \"This is the new description.\"}) { title desc}}", {});
   const atomicTime = performance.now() - startAtomic;
