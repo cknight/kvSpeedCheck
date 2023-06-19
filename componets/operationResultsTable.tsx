@@ -40,7 +40,7 @@ export default function OperationAndDbResultsTables(props:OpResultsTablesProps) 
     {
       id: "strongReadPerformance",
       name: "Strong consistency read performance",
-      summary: eventualReadSummary
+      summary: strongReadSummary
     },
     {
       id: "writePerformance",
