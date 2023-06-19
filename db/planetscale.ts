@@ -15,7 +15,7 @@ export async function testPlanetscale(): Promise<DbPerfRun> {
   
   const dbUrl = Deno.env.get("PLANETSCALE_DB_URL");
   if (!dbUrl) {
-    throw new Error(`Planetscale DB URL not set`);
+    throw new Error(`PlanetScale DB URL not set`);
   }
 
   const conn = connect({ url: dbUrl })
