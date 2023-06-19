@@ -15,7 +15,7 @@ export default function ResultsSelector(props: ResultsSelectorProps) {
         <select id="resultsSelector" class="p-2 text-lg bg-[#202020] border-4 rounded border-blue-400">
           <optgroup label="By operation">
             <option value="writePerformance">Write performance</option>
-            <option value="atomicWritePerformance">Atomic write performance</option>
+            <option value="atomicWritePerformance">Transactional write performance</option>
             <option value="eventualReadPerformance">Eventual read performance</option>
             <option value="strongReadPerformance">Strong read performance</option>
           </optgroup>

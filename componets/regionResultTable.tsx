@@ -17,7 +17,7 @@ export default function RegionResultTable(props: RegionResultTableProps) {
             <tr>
               <th class="sticky left-0 z-10 px-6 py-3 bg-[#202c2c]">DB</th>
               <th class="min-w-[100px] bg-[#202c2c]">Write</th>
-              <th class="min-w-[100px] bg-[#202c2c]">Atomic write</th>
+              <th class="min-w-[100px] bg-[#202c2c]">Transactional write</th>
               <th class="min-w-[100px] bg-[#202c2c]">Eventual read</th>
               <th class="min-w-[100px] bg-[#202c2c]">Strong read</th>
             </tr>

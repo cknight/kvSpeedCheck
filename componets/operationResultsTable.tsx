@@ -49,7 +49,7 @@ export default function OperationAndDbResultsTables(props:OpResultsTablesProps) 
     },
     {
       id: "atomicWritePerformance",
-      name: "Atomic/transaction write performance",
+      name: "Transactional write performance",
       summary: atomicWriteSummary
     }
   ]
@@ -109,7 +109,7 @@ export default function OperationAndDbResultsTables(props:OpResultsTablesProps) 
                     <tr>
                       <th class="sticky left-0 z-10 px-6 py-4 bg-[#202c2c]">Region</th>
                       <th class="min-w-[100px] bg-[#202c2c]">Write</th>
-                      <th class="min-w-[100px] bg-[#202c2c]">Atomic<br/>write</th>
+                      <th class="min-w-[100px] bg-[#202c2c]">Transactional<br/>write</th>
                       <th class="min-w-[100px] bg-[#202c2c]">Eventual<br/>read</th>
                       <th class="min-w-[100px] bg-[#202c2c]">Strong<br/>read</th>
                     </tr>
