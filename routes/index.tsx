@@ -66,10 +66,12 @@ export const handler: Handlers = {
         continue;
       }
 
-      regions.get(run.regionId)!.get(run.dbName)!.writePerformanceStats.push(run.writePerformance);
-      regions.get(run.regionId)!.get(run.dbName)!.atomicWritePerformanceStats.push(run.atomicWritePerformance);
-      regions.get(run.regionId)!.get(run.dbName)!.eventualReadPerformanceStats.push(run.eventualReadPerformance);
-      regions.get(run.regionId)!.get(run.dbName)!.strongReadPerformanceStats.push(run.strongReadPerformance);
+      if (regions.get(run.regionId) != undefined) {
+        regions.get(run.regionId)!.get(run.dbName)!.writePerformanceStats.push(run.writePerformance);
+        regions.get(run.regionId)!.get(run.dbName)!.atomicWritePerformanceStats.push(run.atomicWritePerformance);
+        regions.get(run.regionId)!.get(run.dbName)!.eventualReadPerformanceStats.push(run.eventualReadPerformance);
+        regions.get(run.regionId)!.get(run.dbName)!.strongReadPerformanceStats.push(run.strongReadPerformance);
+      }
     }
 
     return await ctx.render({measurement: localPerf, entriesListPerf, numberOfEntries, summary: regions});
