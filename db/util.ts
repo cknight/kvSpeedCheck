@@ -5,10 +5,12 @@ export const kv = await Deno.openKv();
 export const linkStyles = "text([#0000ee] visited:[#551A8B] dark:[#8cb4ff] dark:visited:[#cda9ef])";
 
 export async function recordTiming(dbPerfRun: DbPerfRun): Promise<void> {
+  if (dbPerfRun.writePerformance < 0) return; // don't record invalid results
+
   for(let attempts = 0; attempts < 10; attempts++) {
     const key = ["dbPerfRun", Date.now()];
     const result = await kv.atomic()
-                      .check({ key, versionstamp: null }) // `null` versionstamps mean 'no value'
+                      .check({ key, versionstamp: null }) // `null` versionstamp mean 'no value'
                       .set(key, dbPerfRun)
                       .commit();
     if (result.ok) {
@@ -32,7 +34,7 @@ export async function dbMonthlyLimitExceeded(dbName: string, maxMonthlyLimit: nu
       return true;
     } 
     
-    await kv.set(["current-month-requests"], currentMonthRequests.value + 3);
+    await kv.set([dbName, "current-month-requests"], currentMonthRequests.value + 3);
   }
   return false;
 }
@@ -45,6 +47,17 @@ export function getDefaultRecord(dbName: string): DbPerfRun {
     atomicWritePerformance: -1,
     eventualReadPerformance: -1,
     strongReadPerformance: -1,
+  };
+}
+
+export function getErrorRecord(dbName: string): DbPerfRun {
+  return {
+    dbName,
+    regionId: Deno.env.get("DENO_REGION") || "unknown",
+    writePerformance: -99,
+    atomicWritePerformance: -99,
+    eventualReadPerformance: -99,
+    strongReadPerformance: -99,
   };
 }
 
