@@ -22,10 +22,10 @@ export default function ResultsSelector(props: ResultsSelectorProps) {
           </optgroup>
           <optgroup label="By DB">
             <option value="DenoKV">DenoKV</option>
+            <option value="DynamoDB">DynamoDB</option>
             <option value="Fauna">Fauna</option>
             <option value="PlanetScale">PlanetScale</option>
             <option value="UpstashRedis">Upstash</option>
-            <option value="DynamoDB">DynamoDB</option>
           </optgroup>
           <optgroup label="By region">
             {regions.map((region) => (
