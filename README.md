@@ -11,7 +11,7 @@ In addition to the static content for the blog post, this code will also send da
 * PlanetScale
 * Upstash Redis
 
-The primary goal is to measure latency of requests between the databases and analyse their features, characteristics,etc.  All requests are sent from this Fresh application running on Deno Deploy.  Deploy was chosen as the edge function provider as it is the only one (currently) which can run KV.
+The primary goal is to measure latency of requests for operations sent to the databases and analyse their features, characteristics, performance, etc.  All database requests are sent from this Fresh application running on Deno Deploy.  Deploy was chosen as the edge function provider as it is the only one (currently) which can access KV.
 
 ## Environment variables needed
 * UPSTASH_REDIS_URL
@@ -22,7 +22,7 @@ The primary goal is to measure latency of requests between the databases and ana
 * DYNAMODB_SECRET_ACCESS_KEY
 
 ## Database setup
-To run locally, you will need to setup a database in each of the providers (except KV).  Some need schemas uploaded or defined, and all need some minor static data inserted (see comments in code for each database).
+To run locally, you will need to setup a database in each of the providers (except KV) and capture the values for the environment variables above.  Some need schemas uploaded or defined, and all need some minor static data inserted (see comments in code for each database).
 
 Note:  By default, database calls (except KV) are disabled when running locally.
 
