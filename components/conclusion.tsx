@@ -38,9 +38,9 @@ export default function Conclusion() {
         and runs counter to the serverless concept. Admittedly, few projects will ever need to undertake this. The schema management 
         features are impressive and it's the definitive database in this
         experiment which can best handle relational data (N.B. Fauna also handles relational data and it would be interesting to pit
-        these two against each other with complex scenarios around relational data).  Finally, while you get an astonishing amount
-        of reads and writes for your money, storage is 2.5x more than Fauna and 10x more than Upstash or DynamoDB.  100GB of storage
-        will cost you $225/month.
+        these two against each other with complex scenarios around relational data).  Finally, while storage is expensive, you get an
+        astonishing amount of reads and writes for your money.  If you use your database heavily with many reads/writes PlanetScale
+        could make a very compelling case on price.
       </p>
       <p class="mt-3">
         This leaves us with Deno KV.  Going into this experiment, I didn't expect it to hold up as well as it has against the
@@ -53,7 +53,7 @@ export default function Conclusion() {
       </p>
       <p class="mt-3">
         Ultimately which database you choose will depend on your use case.  If you need relational capabilities, go with PlanetScale or 
-        Fauna.  If you need enterprise features or AWS integrations, DynamoDB is an obvious choice.  If read performance is critical,
+        Fauna.  If you need enterprise features or AWS integrations, DynamoDB is an solid choice.  If read performance is critical,
         and you can tolerate eventual consistency, Upstash Redis may be your best choice.  However, for many projects on Deploy, I would
         highly recommend KV.  
       </p>

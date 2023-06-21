@@ -553,10 +553,12 @@ export default function Analysis() {
           an ETL path to move you data to another database.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Pricing: </span>PlanetScale has some very generous read/write pricing for it's database.  The entry
-          level paid plan gives you 100 billion reads and 50 million writes, far more than any of the other databases.  That said,
+          <span class="font-bold">Pricing: </span>PlanetScale has some incredibly generous 
+          read/write <a class={linkStyles} href="https://planetscale.com/docs/concepts/billing">pricing</a> for it's database that puts
+          it in a league of its own.  The entry level paid plan gives you 100 billion (yes, billion) reads and 50 million writes. That's 
+          850 times more reads per dollar spend than the next most cheapest database for reads (DynamoDB). On the flip side,
           while you also get 10GB storage free, after that the storage is very expensive compared to other databases (10x more expensive
-          than Upstash or DynamoDB for example).
+          than Upstash or DynamoDB for example).  However, many databases will stay under the free 10GB. 
         </p>
       </div>
    </>
