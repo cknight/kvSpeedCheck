@@ -1,5 +1,5 @@
-import { ApiFactory } from 'https://deno.land/x/aws_api/client/mod.ts';
-import { PutItemInput, ConditionCheck, DynamoDB, Put } from 'https://deno.land/x/aws_api/services/dynamodb/mod.ts';
+import { ApiFactory } from "https://deno.land/x/aws_api@v0.8.1/client/mod.ts";
+import { PutItemInput, ConditionCheck, DynamoDB, Put } from "https://deno.land/x/aws_api@v0.8.1/services/dynamodb/mod.ts";
 import { DbPerfRun } from "../types.ts";
 import { getDefaultRecord,dbMonthlyLimitExceeded,recordTiming } from "./util.ts";
 

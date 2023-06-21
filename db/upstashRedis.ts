@@ -1,6 +1,6 @@
 import { Redis } from "https://deno.land/x/upstash_redis@v1.20.6/mod.ts";
 import { DbPerfRun } from "../types.ts";
-import { dbMonthlyLimitExceeded, getDefaultRecord, kv, recordTiming } from "./util.ts";
+import { dbMonthlyLimitExceeded, getDefaultRecord, recordTiming } from "./util.ts";
 
 
 export async function testUpstashRedis(): Promise<DbPerfRun> {
