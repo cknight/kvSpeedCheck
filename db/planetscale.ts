@@ -21,23 +21,27 @@ export async function testPlanetscale(): Promise<DbPerfRun> {
   const conn = connect({ url: dbUrl })
   
   //write
-  const startWrite = performance.now();
-  await conn.execute("insert into ID_VALUE (VALUE) values ('WORLD')");
-  const writeTime = performance.now() - startWrite;
+  const startWrite = Date.now();
+  await conn.execute("insert into ID_VALUE (VALUE) values ('" + crypto.randomUUID() + "')");
+  const writeTime = Date.now() - startWrite;
+
+  // *******
+  // The next read relies on a pre-existing key '1' in the database.
+  // *******
 
   //eventual read
-  const startRead = performance.now();
+  const startRead = Date.now();
   await conn.execute("select VALUE from ID_VALUE where ID=1");
-  const readTime = performance.now() - startRead;
+  const readTime = Date.now() - startRead;
 
   //atomic transactional write
-  const startAtomic = performance.now();
+  const startAtomic = Date.now();
   await conn.transaction(async (tx:Connection) => {
-    const insert1 = await tx.execute(`insert into ID_VALUE (VALUE) values ('WORLD1_transactional_${crypto.randomUUID()}')`);
-    const insert2 = await tx.execute(`insert into ID_VALUE (VALUE) values ('WORLD2_transactional_${crypto.randomUUID()}')`);
+    const insert1 = await tx.execute(`insert into ID_VALUE (VALUE) values ('${crypto.randomUUID()}')`);
+    const insert2 = await tx.execute(`insert into ID_VALUE (VALUE) values ('${crypto.randomUUID()}')`);
     return [insert1, insert2];
   });
-  const atomicTime = performance.now() - startAtomic;
+  const atomicTime = Date.now() - startAtomic;
 
   const dbPerf: DbPerfRun = {
     dbName: dbName,

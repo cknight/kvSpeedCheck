@@ -4,13 +4,17 @@ import { kv, recordTiming } from "./util.ts";
 export async function testDenoKv(): Promise<DbPerfRun> {
   //measure write performance
   const startWrite = Date.now();
-  await kv.set(["hello"], "world");
+  await kv.set([crypto.randomUUID()], "world");
   const writePerformance = Date.now() - startWrite;
 
   //measure atomic/transaction write performance
   const startAtomicWrite = Date.now();
-  await kv.atomic().set(["hello"], "world").set(["123"], "456").commit();
+  await kv.atomic().set([crypto.randomUUID()], "hello").set([crypto.randomUUID()], "world").commit();
   const atomicWritePerformance = Date.now() - startAtomicWrite;
+
+  // *******
+  // The next two reads rely on a pre-existing key 'hello' in the KV store.
+  // *******
 
   //measure eventual read performance
   const startEventualRead = Date.now();

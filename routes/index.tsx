@@ -25,7 +25,7 @@ export const handler: Handlers = {
     const regions = new Map<string, Map<string, DbPerfRunSummary>>();
       
     //Get previous runs from all users
-    const startEntriesListPerf = performance.now();
+    const startEntriesListPerf = Date.now();
 
     const entries = kv.list({prefix: ["dbPerfRun"]}, {consistency: "eventual"});
     let numberOfEntries = 0;
@@ -52,7 +52,7 @@ export const handler: Handlers = {
       numberOfEntries++;
     }
 
-    const entriesListPerf = Math.round(performance.now() - startEntriesListPerf);
+    const entriesListPerf = Math.round(Date.now() - startEntriesListPerf);
 
     //Run new local tests
     const [denoKvPerf, upstashRedisPerf, faunaPerf, planetScalePerf, dynamoDbPerf] = await Promise.all([
@@ -97,7 +97,7 @@ export default function Home(data: PageProps<PerfProps>) {
       <body class="bg-[#202020] text-gray-100 w-full h-full font-['proxima-nova, system-ui, -apple-system, BlinkMacSystemFont, Segoe UI, Roboto, Helvetica Neue, sans-serif']">
         <div class="opacity-100 opacity-0"></div>
         <div class="p-4 mx-auto max-w-screen-md font-light">
-          <div id="blog" class="zzzhidden">
+          <div id="blog">
 
             <img src="/graph.png" alt="Image of a network graph"/>
             <h1 class="mb-8 mt-8 text-3xl font-bold md:text-4xl lg:text-4xl">Global database comparison</h1>
@@ -182,7 +182,8 @@ export default function Home(data: PageProps<PerfProps>) {
               </ul>
             </p>
             <p class="mt-3">
-              The  <a class={linkStyles} href="https://en.wikipedia.org/wiki/PACELC_theorem">PACELC theorem</a> nicely describes the trade-offs between consistency and latency.  Stronger consistency means higher latency
+              The  <a class={linkStyles} href="https://en.wikipedia.org/wiki/PACELC_theorem">PACELC theorem</a> nicely 
+              describes the trade-offs between consistency and latency.  Stronger consistency means higher latency
               and the reverse is true as well with weaker consistency allowing for lower latency.
             </p>
             <p class="mt-3">
@@ -399,7 +400,7 @@ export default function Home(data: PageProps<PerfProps>) {
           </p>
 
           <p class="mt-3"><div class="border-1 p-3 border-red-500">
-            <span class="font-bold text-red-500 underline">Important:</span> Please read the analysis on each database below to understand
+            <span class="font-bold text-red-400 underline">Important:</span> Please read the analysis on each database below to understand
             the results with the proper context.  Generally speaking, the results are not always directly comparable as the databases have different
             setups, use cases, replica regions, configuration, etc. You should always do your own research, testing and 
             benchmarking to determine which database is best for your use case.
@@ -891,7 +892,7 @@ export default function Home(data: PageProps<PerfProps>) {
               eviction, encryption at rest, IP whitelisting and backup/restore amongst others.
             </p>
             <p class="mt-3">
-              <span class="font-bold">Vendor independence: </span>Like the otherdatabases besides KV, Upstash Redis is portable and you can
+              <span class="font-bold">Vendor independence: </span>Like the other databases besides KV, Upstash Redis is portable and you can
               move it to another edge provider.  Additionally, by using a Redis compatible API, you can in theory move to a different Redis 
               installation.  One challenge to that is there are little to no other offerings of globally distributed durable Redis.
             </p>

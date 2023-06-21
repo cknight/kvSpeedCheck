@@ -20,12 +20,16 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
   }
 
   const client = new ApiFactory({ 
-    region: "us-east-1", 
+    region: "us-east-1", //primary/only region configured for this test
     credentials: {
       awsAccessKeyId: accessKey,
       awsSecretKey: secretKey
     } 
   }).makeNew(DynamoDB);
+
+  // *******
+  // The next read query relies on a pre-existing partition key '001' in DynamoDB.
+  // *******
 
   const eventualReadParams = {
     TableName: "EdgeDbCheck",
@@ -37,6 +41,10 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     ConsistentRead: false
   };
 
+  // *******
+  // The next read query relies on a pre-existing partition key '002' in DynamoDB.
+  // *******
+
   const strongReadParams = {
     TableName: "EdgeDbCheck",
     Key: {
@@ -46,6 +54,10 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     },
     ConsistentRead: true
   };
+
+  // *******
+  // The next transaction condition check relies on a pre-existing partition key '004' in DynamoDB.
+  // *******
 
   const transactionConditionCheck: ConditionCheck = {
     TableName: "EdgeDbCheck",
@@ -61,7 +73,7 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     TableName: "EdgeDbCheck",
     Item: {
       id: {
-        S: "003-" + crypto.randomUUID()
+        S: crypto.randomUUID()
       },
       val: {
         S: "Transaction set at " + Date.now()
@@ -73,7 +85,7 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     TableName: "EdgeDbCheck",
     Item: {
       id: {
-        S: "005-" + crypto.randomUUID()
+        S: crypto.randomUUID()
       },
       val: {
         S: "Value set at " + Date.now()
@@ -84,8 +96,8 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
   //The first request to DynamoDB appears to incur a long startup time (cold start), regardless if it is a read or write
   //To make the comparisons with other DBs more 'fair', we do a dummy read first to warm up the connection
   //However, really, this is an important consideration and should be taken into account.
-  //warm up (e.g. takes 434ms from EU to US)
-  const startWarmup = performance.now();
+  //warm up takes approx 400ms
+  const startWarmup = Date.now();
   await client.getItem({
     TableName: "EdgeDbCheck",
     Key: {
@@ -95,20 +107,20 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
     },
     ConsistentRead: false
   });
-  console.log(`DynamoDB warm up took ${performance.now() - startWarmup}ms`);
+  console.log(`DynamoDB warm up took ${Date.now() - startWarmup}ms`);
 
   //write
-  const startWrite = performance.now();
+  const startWrite = Date.now();
   await client.putItem(basicWrite);
-  const writeTime = performance.now() - startWrite;
+  const writeTime = Date.now() - startWrite;
 
   //eventual read
-  const startRead = performance.now();
+  const startRead = Date.now();
   await client.getItem(eventualReadParams);
-  const readTime = performance.now() - startRead;
+  const readTime = Date.now() - startRead;
 
   //transactional write
-  const startAtomicWrite = performance.now();
+  const startAtomicWrite = Date.now();
   //Non-sensical transaction which 'put's an item if item with id 004 already exists (which it does)
   await client.transactWriteItems({
     TransactItems: [
@@ -120,12 +132,12 @@ export async function testDynamoDB(): Promise<DbPerfRun> {
       }
     ]
   });
-  const atomicWrite = performance.now() - startAtomicWrite;
+  const atomicWrite = Date.now() - startAtomicWrite;
 
   //single region strong read
-  const startStrongRead = performance.now();
+  const startStrongRead = Date.now();
   await client.getItem(strongReadParams)
-  const strongRead = performance.now() - startStrongRead;
+  const strongRead = Date.now() - startStrongRead;
 
   const dbPerf: DbPerfRun = {
     dbName: dbName,

@@ -18,22 +18,26 @@ export async function testUpstashRedis(): Promise<DbPerfRun> {
   });
 
   // measure write performance
-  const startWrite = performance.now();
-  await upstashRedis.set("foo", "bar");
-  const writeTime = performance.now() - startWrite;
+  const startWrite = Date.now();
+  await upstashRedis.set(crypto.randomUUID(), "hello world");
+  const writeTime = Date.now() - startWrite;
+
+  // *******
+  // The next read relies on a pre-existing key 'foo' in the database.
+  // *******
   
   // measure eventual read performance (no strong consistency)
-  const startRead = performance.now();
+  const startRead = Date.now();
   await upstashRedis.get("foo");
-  const readTime = performance.now() - startRead;
+  const readTime = Date.now() - startRead;
   
   // measure atomic write performance
-  const startAtomic = performance.now();
+  const startAtomic = Date.now();
   const atomic = upstashRedis.multi();
-  atomic.set("foo", "bar");
-  atomic.set("123", "456");
+  atomic.set(crypto.randomUUID(), "hello");
+  atomic.set(crypto.randomUUID(), "world");
   await atomic.exec();
-  const atomicTime = performance.now() - startAtomic;
+  const atomicTime = Date.now() - startAtomic;
 
   const dbPerf: DbPerfRun = {
     dbName: dbName,
