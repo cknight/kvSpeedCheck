@@ -1,3 +1,5 @@
+import { linkStyles } from "../db/util.ts";
+
 export default function LatencyExperiment() {
   return (
     <>
@@ -27,6 +29,11 @@ export default function LatencyExperiment() {
         and the data volumes are very small, both of which are unrealistic in a real-world application.  The experiment is not
         meant to be a benchmark of the databases per se, but rather a simple test of the latency of the databases from 
         different regions.
+      </p>
+
+      <p class="mt-3">
+        The excellent <a class={linkStyles} href="https://www.webpagetest.org/">WebPageTest</a> was used to send requests
+        to the different regions and provide the initial population of results.
       </p>
 
       <p class="mt-3"><div class="border-1 p-3 border-red-500">
