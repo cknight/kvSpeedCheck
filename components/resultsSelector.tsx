@@ -6,6 +6,7 @@ export interface ResultsSelectorProps {
 }
 
 export default function ResultsSelector(props: ResultsSelectorProps) {
+  const regions = props.regions.map((region) => regionMapper(region)).sort((a, b) => a.localeCompare(b)); 
   return (
     <>
       <Head>
@@ -27,8 +28,8 @@ export default function ResultsSelector(props: ResultsSelectorProps) {
             <option value="DynamoDB">DynamoDB</option>
           </optgroup>
           <optgroup label="By region">
-            {props.regions.map((region) => (
-              <option value={regionMapper(region)}>{regionMapper(region)}</option>
+            {regions.map((region) => (
+              <option value={region}>{region}</option>
             ))}
           </optgroup>
         </select>

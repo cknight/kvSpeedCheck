@@ -2,6 +2,8 @@ import { DbPerfRun, Stats } from "../types.ts";
 
 export const kv = await Deno.openKv();
 
+export const linkStyles = "text([#0000ee] visited:[#551A8B] dark:[#8cb4ff] dark:visited:[#cda9ef])";
+
 export async function recordTiming(dbPerfRun: DbPerfRun): Promise<void> {
   for(let attempts = 0; attempts < 10; attempts++) {
     const key = ["dbPerfRun", Date.now()];
