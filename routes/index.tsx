@@ -88,7 +88,13 @@ export default function Home(data: PageProps<PerfProps>) {
   const sortedRegions = Array.from(summary.keys()).sort((a, b) => a.localeCompare(b));
   
   function outputPerformance(performance: number): string {
-    return performance >= 0 ? performance + "ms" : "-";
+    if (performance === -1) {
+      return "-";
+    } else if (performance === -99) {
+      return "Error";
+    } else {
+      return performance + "ms";
+    }
   }
 
   return (
