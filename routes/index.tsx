@@ -102,13 +102,13 @@ export default function Home(data: PageProps<PerfProps>) {
       <Head>
         <title>Global database comparison on Deploy</title>
         <meta name="description" content="Comparing latencies, characteristics and features of Deno KV, DynamoDB, Fauna, PlanetScale and Upstash Redis on Deno Deploy" />
-        <meta property="og:title" content="Global database comparison on Deploy" />
-        <meta property="og:url" content="https://global-db-comparison.deno.dev/" />
-        <meta name="twitter:site" content="@cknight1234"/>
-        <meta name="twitter:title" content="Global database comparison on Deploy"/>
-        <meta name="twitter:description" content="Comparing latencies, characteristics and features of Deno KV, DynamoDB, Fauna, PlanetScale and Upstash Redis on Deno Deploy"/>
+        <meta property="og:title" content="Global database comparison on Deploy"/>
+        <meta property="og:description" content="Comparing latencies, characteristics and features of Deno KV, DynamoDB, Fauna, PlanetScale and Upstash Redis on Deno Deploy"/>
+        <meta property="og:image" content="https://global-db-comparison.deno.dev/graph.png"/>
+        <meta property="og:type" content="website"/>
+        <meta property="og:url" content="https://global-db-comparison.deno.dev/"/>
+        <meta property="og:site_name" content="Global database comparison on Deploy"/>
         <meta name="twitter:card" content="summary_large_image"/>
-        <meta name="twitter:image" content="https://global-db-comparison.deno.dev/graph.png"/>
         <style>
           {`:root {
             color-scheme: dark;
