@@ -107,7 +107,7 @@ export default function Home(data: PageProps<PerfProps>) {
         <meta property="og:image" content="https://global-db-comparison.deno.dev/graph.png"/>
         <meta property="og:type" content="website"/>
         <meta property="og:url" content="https://global-db-comparison.deno.dev/"/>
-        <meta property="og:site_name" content="Global database comparison on Deploy"/>
+        <meta property="og:site_name" content="Blog post and web application"/>
         <meta name="twitter:card" content="summary_large_image"/>
         <style>
           {`:root {
