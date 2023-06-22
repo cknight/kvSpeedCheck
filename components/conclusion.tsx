@@ -28,11 +28,6 @@ export default function Conclusion() {
         once <a class={linkStyles} href="https://deno.com/manual/node/npm_specifiers">npm specifiers</a> are supported in Deploy.
       </p>
       <p class="mt-3">
-        I loved how easy it was to get up and running with Upstash and those familiar with Redis will feel right at home.  The simplicity of their  
-        serverless pricing model is really nice as well as the ability to customise replica regions.  The pricing of reads and writes
-        is expensive and so enabling lots of replicas could be costly.  Write performance was also disappointing.
-      </p>
-      <p class="mt-3">
         PlanetScale was a surprise to me having heard great things about it.  Technically it is impressive with Vitess and thus
         a sharded distributed relational database.  Read performance is disappointingly slow.  The need to manually shard your database once it degrades or runs into infrastructure problems is a turn off for me
         and runs counter to the serverless concept. Admittedly, few projects will ever need to undertake this. The schema management 
@@ -41,6 +36,11 @@ export default function Conclusion() {
         these two against each other with complex scenarios around relational data).  Finally, while storage is expensive, you get an
         astonishing amount of reads and writes for your money.  If you use your database heavily with many reads/writes PlanetScale
         could make a very compelling case on price.
+      </p>
+      <p class="mt-3">
+        I loved how easy it was to get up and running with Upstash and those familiar with Redis will feel right at home.  The simplicity of their  
+        serverless pricing model is really nice as well as the ability to customise replica regions.  The pricing of reads and writes
+        is expensive and so enabling lots of replicas could be costly.  Write performance was also disappointing.
       </p>
       <p class="mt-3">
         This leaves us with Deno KV.  Going into this experiment, I didn't expect it to hold up as well as it has against the

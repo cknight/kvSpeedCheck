@@ -112,107 +112,7 @@ export default function Analysis() {
           <span class="font-bold">Pricing: </span>No pricing has been announced for Deno KV on Deploy yet.
         </p>
       </div>
-      <h3 class="mt-8 text-xl font-bold">
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42.3 47" class="w-8 inline mr-3"><path style="fill:#813eef" d="M32.9 9.9c-2.9 1-4.3 2.7-5.3 5.4-.2.7-.9 1.5-1.6 2.1l2.4 2.6-7.6-5.3L0 0s1.5 9.8 2 13.4c.4 2.5 1 3.7 3 4.8l.8.4 3.4 1.8-2-1.1 9.4 5.2-.1.1L6.4 20c.5 1.8 1.6 5.4 2 7 .5 1.7 1 2.3 2.7 2.9l3 1.1 1.9-.7-2.4 1.6L1.7 47c7.9-7.4 14.6-10 19.5-12.1 6.3-2.7 10-4.5 12.5-10.7 1.8-4.4 3.1-10 4.9-12.2l3.7-4.7c0-.1-7.6 2-9.4 2.6z"></path></svg>
-          Fauna
-      </h3>
-      <div class="mt-8" id="FaunaAnalysis">
-        <table class="text-left bg-[#202020]">
-          <thead class="border-b font-medium">
-            <tr>
-              <th class="sticky w-56 left-0 z-10 px-6 py-3 bg-[#202c2c]">Metric</th>
-              <th class="min-w-[100px] bg-[#202c2c]">Rating</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>Setup/Configuration</td>
-              <td><span class="text-yellow-500">★★★☆☆</span></td>
-            </tr>
-            <tr>
-              <td>Local development</td>
-              <td><span class="text-yellow-500">★★★★☆</span></td>
-            </tr>
-            <tr>
-              <td>Global distribution</td>
-              <td><span class="text-yellow-500">★★☆☆☆</span></td>
-            </tr>
-            <tr>
-              <td>Ease of use</td>
-              <td><span class="text-yellow-500">★★☆☆☆</span></td>
-            </tr>
-            <tr>
-              <td>Performance</td>
-              <td><span class="text-yellow-500">★★★★☆</span></td>
-            </tr>
-            <tr>
-              <td>Consistency</td>
-              <td><span class="text-yellow-500">★★★★★</span></td>
-            </tr>
-            <tr>
-              <td>Features/Flexibility</td>
-              <td><span class="text-yellow-500">★★★★★</span></td>
-            </tr>
-            <tr>
-              <td>Vendor independence</td>
-              <td><span class="text-yellow-500">★★★☆☆</span></td>
-            </tr>
-          </tbody>
-        </table>
-        <p class="mt-8">
-          <span class="font-bold">Setup/Configuration: </span>Creating a Fauna database is straightforward via their web UI.  
-          Once the database is created you need to create a  <a class={linkStyles} href="https://docs.fauna.com/fauna/current/learn/understanding/collections">Collection</a>,
-          similar to a table in a traditional database, via the UI, in their database specific Fauna Query Language (FQL) or via their GraphQL API.
-          You can also add a GraphQL schema to your Collection.  Finally, you need to create a security key to access your database via the 
-          javascript client or http POST request.  While nothing was overly difficult, the process was not as simple as other databases 
-          and there is a lot of new terminology to learn.
-        </p>
-        <p class="mt-3">
-          <span class="font-bold">Local development: </span>For  <a class={linkStyles} href="https://docs.fauna.com/fauna/current/build/tools/dev">local development</a>,
-          Fauna offers a docker container to run a local instance of Fauna which must be installed and given minor
-          configuration to run.  You can run it with persisted data or start with a clean sheet. 
-        </p>
-        <p class="mt-3">
-          <span class="font-bold">Global distribution: </span>Fauna bills itself as a multi-region distributed database.  However, without upgrading to their enterprise plan (which gets you VM isolated
-          single tenant customised deployments anywhere you want), you are limited to either Western centric US or Europe region groups (but not a mixture).  With the region
-          group, there will be 3 replicas of your data within the region.  Speaking with their support, potential changes are coming to offer
-          an expanded global offering. As of now, however, this may not be ideal if your primary user base is in Asia for example.
-        </p>
-        <p class="mt-3">
-          <span class="font-bold">Ease of use: </span>Fauna had the steepest learning curve of the databases reviewed, however, if you already know GraphQL this will help.
-          Fauna's FQL is a powerful language but as a custom built API takes time to learn.  The documentation on the website is OK but lacking
-          at times.  It will take considerable time to become comfortable with Fauna as conceptually it is very different to other databases.
-          There are few examples of using Fauna with Deno and even the  <a class={linkStyles} href="https://deno.com/deploy/docs/tutorial-faunadb">guide</a> on 
-          Deno Deploy documentation can be a challenge to follow.
-        </p>
-        <p class="mt-3">
-          <span class="font-bold">Performance: </span>Performance wise, Fauna held its ground well, despite being limited to a single region group.  Writes were slow compared to the other
-          databases, but strong reads were fast, though as Fauna does not offer eventual consistency reads other databases can significantly outperform Fauna if
-          eventual consistency is acceptable.
-        </p>
-        <p class="mt-3">
-          <span class="font-bold">Consistency: </span>Fauna, like KV, offers very strong consistency but as mentioned previously there is no option for eventual read consistency.  This is likely
-          due to the fact that Fauna is an active-active database where writes only complete after replication to all replicas.  Everything in Fauna
-          is a transaction. 
-        </p>
-        <p class="mt-3">
-          <span class="font-bold">Features/Flexibility: </span>Where Fauna really shines is in it's features and flexibility.  If you invest the time to properly learn Fauna, it will reward you with 
-          capabilities not found in other NoSQL databases such as joins, indexes, normalised data, SQL like queries, functions (which 
-          are similar to stored procedures), data streaming, backups, temporality (reading data as it was at a point in time), and more.
-        </p>
-        <p class="mt-3">
-          <span class="font-bold">Vendor independence: </span>Fauna is a proprietary database with a custom API and many features.  Once your application is deeply embedded into Fauna migrating
-          to another database will be difficult and costly.  On the plus side, unlike KV you can take your Fauna database with you to another 
-          edge platform and as the GraphQL API is pure http based there are no libraries to worry about.  Alternatively, 
-          using  <a class={linkStyles} href="https://airbyte.com/">Airbyte</a> you can extract your data from Fauna and move it elsewhere.
-        </p>
-        <p class="mt-3">
-          <span class="font-bold">Pricing: </span>There 
-          are  <a class={linkStyles} href="https://docs.fauna.com/fauna/current/learn/understanding/billing">7 metrics</a> Fauna uses in its pricing model.
-          Their entry level plan gets you $25 worth of services each month which equates to a maximum of 54 million reads, 11 million 
-          writes or 25GB of storage.  Costs appear to be middle of the road.
-        </p>
-      </div>
+
       <h3 class="mt-8 text-xl font-bold">
             <svg class="inline mr-3 w-8" viewBox="-16.5 0 289 289" preserveAspectRatio="xMidYMid">
               <g>
@@ -340,19 +240,10 @@ export default function Analysis() {
       </div>
 
       <h3 class="mt-8 text-xl font-bold">
-          <svg class="inline w-6 mr-3" viewBox="0 0 256 341" version="1.1" preserveAspectRatio="xMidYMid">
-                <g>
-                    <path d="M0,298.416784 C56.5542815,354.970323 148.246768,354.970323 204.801032,298.416784 C261.354571,241.86252 261.354571,150.170106 204.801032,93.6158424 L179.200462,119.215688 C221.61634,161.631567 221.61634,230.401059 179.200462,272.816213 C136.785307,315.232092 68.0157428,315.232092 25.5998642,272.816213 L0,298.416784 Z" fill="#00C98D"></path>
-                    <path d="M51.200362,247.216367 C79.4772765,275.493137 125.323122,275.493137 153.600615,247.216367 C181.877385,218.939598 181.877385,173.093028 153.600615,144.816259 L128.000769,170.416105 C142.139154,184.55449 142.139154,207.477412 128.000769,221.616521 C113.86166,235.754906 90.9387378,235.754906 76.800353,221.616521 L51.200362,247.216367 Z" fill="#00C98D"></path>
-                    <path d="M256,42.415426 C199.445737,-14.1384753 107.753322,-14.1384753 51.1994207,42.415426 C-5.35485714,98.9696894 -5.35485714,190.662104 51.1994207,247.216367 L76.7989048,221.616521 C34.3841124,179.200643 34.3841124,110.431151 76.7989048,68.0159962 C119.214783,25.6001177 187.984275,25.6001177 230.39943,68.0159962 L256,42.415426 Z" fill="#00C98D"></path>
-                    <path d="M204.800308,93.6158424 C176.523538,65.3390727 130.676245,65.3390727 102.399475,93.6158424 C74.1219813,121.893336 74.1219813,167.739181 102.399475,196.015951 L127.999321,170.416105 C113.860936,156.27772 113.860936,133.354797 127.999321,119.215688 C142.137706,105.077304 165.060629,105.077304 179.199738,119.215688 L204.800308,93.6158424 Z" fill="#00C98D"></path>
-                    <path d="M256,42.415426 C199.445737,-14.1384753 107.753322,-14.1384753 51.1994207,42.415426 C-5.35485714,98.9696894 -5.35485714,190.662104 51.1994207,247.216367 L76.7989048,221.616521 C34.3841124,179.200643 34.3841124,110.431151 76.7989048,68.0159962 C119.214783,25.6001177 187.984275,25.6001177 230.39943,68.0159962 L256,42.415426 Z" fill-opacity="0.4" fill="#FFFFFF"></path>
-                    <path d="M204.800308,93.6158424 C176.523538,65.3390727 130.676245,65.3390727 102.399475,93.6158424 C74.1219813,121.893336 74.1219813,167.739181 102.399475,196.015951 L127.999321,170.416105 C113.860936,156.27772 113.860936,133.354797 127.999321,119.215688 C142.137706,105.077304 165.060629,105.077304 179.199738,119.215688 L204.800308,93.6158424 Z" fill-opacity="0.4" fill="#FFFFFF"></path>
-                </g>
-            </svg>
-            Upstash Redis analysis
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 42.3 47" class="w-8 inline mr-3"><path style="fill:#813eef" d="M32.9 9.9c-2.9 1-4.3 2.7-5.3 5.4-.2.7-.9 1.5-1.6 2.1l2.4 2.6-7.6-5.3L0 0s1.5 9.8 2 13.4c.4 2.5 1 3.7 3 4.8l.8.4 3.4 1.8-2-1.1 9.4 5.2-.1.1L6.4 20c.5 1.8 1.6 5.4 2 7 .5 1.7 1 2.3 2.7 2.9l3 1.1 1.9-.7-2.4 1.6L1.7 47c7.9-7.4 14.6-10 19.5-12.1 6.3-2.7 10-4.5 12.5-10.7 1.8-4.4 3.1-10 4.9-12.2l3.7-4.7c0-.1-7.6 2-9.4 2.6z"></path></svg>
+          Fauna
       </h3>
-      <div class="mt-8" id="UpstashRedisAnalysis">
+      <div class="mt-8" id="FaunaAnalysis">
         <table class="text-left bg-[#202020]">
           <thead class="border-b font-medium">
             <tr>
@@ -363,19 +254,19 @@ export default function Analysis() {
           <tbody>
             <tr>
               <td>Setup/Configuration</td>
-              <td><span class="text-yellow-500">★★★★★</span></td>
+              <td><span class="text-yellow-500">★★★☆☆</span></td>
             </tr>
             <tr>
               <td>Local development</td>
-              <td><span class="text-yellow-500">★★☆☆☆</span></td>
+              <td><span class="text-yellow-500">★★★★☆</span></td>
             </tr>
             <tr>
               <td>Global distribution</td>
-              <td><span class="text-yellow-500">★★★★★</span></td>
+              <td><span class="text-yellow-500">★★☆☆☆</span></td>
             </tr>
             <tr>
               <td>Ease of use</td>
-              <td><span class="text-yellow-500">★★★★☆</span></td>
+              <td><span class="text-yellow-500">★★☆☆☆</span></td>
             </tr>
             <tr>
               <td>Performance</td>
@@ -383,74 +274,73 @@ export default function Analysis() {
             </tr>
             <tr>
               <td>Consistency</td>
-              <td><span class="text-yellow-500">★★☆☆☆</span></td>
+              <td><span class="text-yellow-500">★★★★★</span></td>
             </tr>
             <tr>
               <td>Features/Flexibility</td>
-              <td><span class="text-yellow-500">★★★★☆</span></td>
+              <td><span class="text-yellow-500">★★★★★</span></td>
             </tr>
             <tr>
               <td>Vendor independence</td>
-              <td><span class="text-yellow-500">★★★★☆</span></td>
+              <td><span class="text-yellow-500">★★★☆☆</span></td>
             </tr>
           </tbody>
         </table>
         <p class="mt-8">
-          <span class="font-bold">Setup/Configuration: </span>Upstash has a simple process to create a database through their 
-          UI console.  You choose a name, global or regional configuration, primary region and read region(s) along with a few
-          other options.  Connection is maintained through a REST URL and 
-          token.   <a class={linkStyles} href="https://docs.upstash.com/redis/quickstarts/deno-deploy">Quick start</a> guides are available for AWS Lambda,
-          Vercel functions, Next.js, Fly.io, Deno Deploy and a fair few more.  They are the only provider in this experiment other than KV
-          to provide specific instructions for getting up and running on Deno Deploy.
+          <span class="font-bold">Setup/Configuration: </span>Creating a Fauna database is straightforward via their web UI.  
+          Once the database is created you need to create a  <a class={linkStyles} href="https://docs.fauna.com/fauna/current/learn/understanding/collections">Collection</a>,
+          similar to a table in a traditional database, via the UI, in their database specific Fauna Query Language (FQL) or via their GraphQL API.
+          You can also add a GraphQL schema to your Collection.  Finally, you need to create a security key to access your database via the 
+          javascript client or http POST request.  While nothing was overly difficult, the process was not as simple as other databases 
+          and there is a lot of new terminology to learn.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Local development: </span>
-              <a class={linkStyles} href="https://docs.upstash.com/redis/sdks/javascriptsdk/developing-or-testing">Local development</a> is achieved through a 
-            community supported project called  <a class={linkStyles} href="https://github.com/hiett/serverless-redis-http">Serverless Redis HTTP (SRH)</a>. 
-            While Upstash offer support to the maintenance they do not maintain this project
-            and one concern would be the single maintainer of the project.  SRH also has a few differences to Upstash Redis.
-            Some instructions are provided for running SRH in docker, but there are gaps leaving you to fill in the blanks.  Additionally
-            you must install your own Redis server locally, for which no documentation or links are given.
-            Compared to the other databases tested, Upstash Redis had the least robust local development experience.
+          <span class="font-bold">Local development: </span>For  <a class={linkStyles} href="https://docs.fauna.com/fauna/current/build/tools/dev">local development</a>,
+          Fauna offers a docker container to run a local instance of Fauna which must be installed and given minor
+          configuration to run.  You can run it with persisted data or start with a clean sheet. 
         </p>
         <p class="mt-3">
-          <span class="font-bold">Global distribution: </span>Upstash provides 8 regions around the globe (3 US, 2 Europe, 1 Asia,
-          1 S. America, and 1 Australia) to use for primary and
-          read replicas.  As Upstash charge per 100k commands and each replica write consumes a command, adding additional read
-          regions will increase your costs, how much depends on how write-heavy your application is.
+          <span class="font-bold">Global distribution: </span>Fauna bills itself as a multi-region distributed database.  However, without upgrading to their enterprise plan (which gets you VM isolated
+          single tenant customised deployments anywhere you want), you are limited to either Western centric US or Europe region groups (but not a mixture).  With the region
+          group, there will be 3 replicas of your data within the region.  Speaking with their support, potential changes are coming to offer
+          an expanded global offering. As of now, however, this may not be ideal if your primary user base is in Asia for example.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Ease of use: </span>Upstash was very easy to use with good documentation.  For users with experience
-          of Redis this will be a particularly easy database to use as Upstash Redis is Redis compatible.  To get working with Deno
-          Deploy, only  <a class={linkStyles} href="https://docs.upstash.com/redis/quickstarts/deno-deploy">a few imports</a> and environment variables are needed.
+          <span class="font-bold">Ease of use: </span>Fauna had the steepest learning curve of the databases reviewed, however, if you already know GraphQL this will help.
+          Fauna's FQL is a powerful language but as a custom built API takes time to learn.  The documentation on the website is OK but lacking
+          at times.  It will take considerable time to become comfortable with Fauna as conceptually it is very different to other databases.
+          There are few examples of using Fauna with Deno and even the  <a class={linkStyles} href="https://deno.com/deploy/docs/tutorial-faunadb">guide</a> on 
+          Deno Deploy documentation can be a challenge to follow.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Performance: </span>While achieving 4 star performance, this is really a tale of two use cases. Write
-          performance is sub-par (2 stars), while eventual read performance is excellent (5 stars), faster in almost every region than
-          the other databases (N.B. remember that Upstash was configured with 8 read regions, while the others have 3 at most).
+          <span class="font-bold">Performance: </span>Performance wise, Fauna held its ground well, despite being limited to a single region group.  Writes were slow compared to the other
+          databases, but strong reads were fast, though as Fauna does not offer eventual consistency reads other databases can significantly outperform Fauna if
+          eventual consistency is acceptable.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Consistency: </span>A weak point of Upstash Redis is consistency. Their consistency model is eventual
-          consistency.  Additionally transactions, while supported in the API,  are not ACID compliant.
+          <span class="font-bold">Consistency: </span>Fauna, like KV, offers very strong consistency but as mentioned previously there is no option for eventual read consistency.  This is likely
+          due to the fact that Fauna is an active-active database where writes only complete after replication to all replicas.  Everything in Fauna
+          is a transaction. 
         </p>
         <p class="mt-3">
-          <span class="font-bold">Features/Flexibility: </span>Upstash Redis is fairly feature rich.  Some features include data
-          eviction, encryption at rest, IP whitelisting and backup/restore amongst others.
+          <span class="font-bold">Features/Flexibility: </span>Where Fauna really shines is in it's features and flexibility.  If you invest the time to properly learn Fauna, it will reward you with 
+          capabilities not found in other NoSQL databases such as joins, indexes, normalised data, SQL like queries, functions (which 
+          are similar to stored procedures), data streaming, backups, temporality (reading data as it was at a point in time), and more.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Vendor independence: </span>Like the other databases besides KV, Upstash Redis is portable and you can
-          move it to another edge provider.  Additionally, by using a Redis compatible API, you can in theory move to a different Redis 
-          installation.  One challenge to that is there are little to no other offerings of globally distributed durable Redis.
+          <span class="font-bold">Vendor independence: </span>Fauna is a proprietary database with a custom API and many features.  Once your application is deeply embedded into Fauna migrating
+          to another database will be difficult and costly.  On the plus side, unlike KV you can take your Fauna database with you to another 
+          edge platform and as the GraphQL API is pure http based there are no libraries to worry about.  Alternatively, 
+          using  <a class={linkStyles} href="https://airbyte.com/">Airbyte</a> you can extract your data from Fauna and move it elsewhere.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Pricing: </span>Upstash 
-          provides the simplest  <a class={linkStyles} href="https://docs.upstash.com/redis/overall/pricing">pricing model</a> of the databases tested.  With its
-          serverless model, you only pay for what you use.  That said, it also has the most expensive read/writes of the databases tested.
-          Like DynamoDB global tables, the more read replicas you add the more expensive it becomes, linearly 
-          increasing your costs for writes and storage.  Storage at least is very cheap, though unlike DynamoDB does not come with any
-          free amount.
+          <span class="font-bold">Pricing: </span>There 
+          are  <a class={linkStyles} href="https://docs.fauna.com/fauna/current/learn/understanding/billing">7 metrics</a> Fauna uses in its pricing model.
+          Their entry level plan gets you $25 worth of services each month which equates to a maximum of 54 million reads, 11 million 
+          writes or 25GB of storage.  Costs appear to be middle of the road.
         </p>
       </div>
+
       <h3 class="mt-8 text-xl font-bold">
           <svg class="inline mr-3 w-8 bg-white p-1" viewBox="0 0 256 256"preserveAspectRatio="xMidYMid">
                 <g>
@@ -561,6 +451,119 @@ export default function Analysis() {
           850 times more reads per dollar spend than the next most cheapest database for reads (DynamoDB). On the flip side,
           while you also get 10GB storage free, after that the storage is very expensive compared to other databases (10x more expensive
           than Upstash or DynamoDB for example).  However, many databases will stay under the free 10GB and so this may not be an issue. 
+        </p>
+      </div>
+
+      <h3 class="mt-8 text-xl font-bold">
+          <svg class="inline w-6 mr-3" viewBox="0 0 256 341" version="1.1" preserveAspectRatio="xMidYMid">
+                <g>
+                    <path d="M0,298.416784 C56.5542815,354.970323 148.246768,354.970323 204.801032,298.416784 C261.354571,241.86252 261.354571,150.170106 204.801032,93.6158424 L179.200462,119.215688 C221.61634,161.631567 221.61634,230.401059 179.200462,272.816213 C136.785307,315.232092 68.0157428,315.232092 25.5998642,272.816213 L0,298.416784 Z" fill="#00C98D"></path>
+                    <path d="M51.200362,247.216367 C79.4772765,275.493137 125.323122,275.493137 153.600615,247.216367 C181.877385,218.939598 181.877385,173.093028 153.600615,144.816259 L128.000769,170.416105 C142.139154,184.55449 142.139154,207.477412 128.000769,221.616521 C113.86166,235.754906 90.9387378,235.754906 76.800353,221.616521 L51.200362,247.216367 Z" fill="#00C98D"></path>
+                    <path d="M256,42.415426 C199.445737,-14.1384753 107.753322,-14.1384753 51.1994207,42.415426 C-5.35485714,98.9696894 -5.35485714,190.662104 51.1994207,247.216367 L76.7989048,221.616521 C34.3841124,179.200643 34.3841124,110.431151 76.7989048,68.0159962 C119.214783,25.6001177 187.984275,25.6001177 230.39943,68.0159962 L256,42.415426 Z" fill="#00C98D"></path>
+                    <path d="M204.800308,93.6158424 C176.523538,65.3390727 130.676245,65.3390727 102.399475,93.6158424 C74.1219813,121.893336 74.1219813,167.739181 102.399475,196.015951 L127.999321,170.416105 C113.860936,156.27772 113.860936,133.354797 127.999321,119.215688 C142.137706,105.077304 165.060629,105.077304 179.199738,119.215688 L204.800308,93.6158424 Z" fill="#00C98D"></path>
+                    <path d="M256,42.415426 C199.445737,-14.1384753 107.753322,-14.1384753 51.1994207,42.415426 C-5.35485714,98.9696894 -5.35485714,190.662104 51.1994207,247.216367 L76.7989048,221.616521 C34.3841124,179.200643 34.3841124,110.431151 76.7989048,68.0159962 C119.214783,25.6001177 187.984275,25.6001177 230.39943,68.0159962 L256,42.415426 Z" fill-opacity="0.4" fill="#FFFFFF"></path>
+                    <path d="M204.800308,93.6158424 C176.523538,65.3390727 130.676245,65.3390727 102.399475,93.6158424 C74.1219813,121.893336 74.1219813,167.739181 102.399475,196.015951 L127.999321,170.416105 C113.860936,156.27772 113.860936,133.354797 127.999321,119.215688 C142.137706,105.077304 165.060629,105.077304 179.199738,119.215688 L204.800308,93.6158424 Z" fill-opacity="0.4" fill="#FFFFFF"></path>
+                </g>
+            </svg>
+            Upstash Redis analysis
+      </h3>
+      <div class="mt-8" id="UpstashRedisAnalysis">
+        <table class="text-left bg-[#202020]">
+          <thead class="border-b font-medium">
+            <tr>
+              <th class="sticky w-56 left-0 z-10 px-6 py-3 bg-[#202c2c]">Metric</th>
+              <th class="min-w-[100px] bg-[#202c2c]">Rating</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Setup/Configuration</td>
+              <td><span class="text-yellow-500">★★★★★</span></td>
+            </tr>
+            <tr>
+              <td>Local development</td>
+              <td><span class="text-yellow-500">★★☆☆☆</span></td>
+            </tr>
+            <tr>
+              <td>Global distribution</td>
+              <td><span class="text-yellow-500">★★★★★</span></td>
+            </tr>
+            <tr>
+              <td>Ease of use</td>
+              <td><span class="text-yellow-500">★★★★☆</span></td>
+            </tr>
+            <tr>
+              <td>Performance</td>
+              <td><span class="text-yellow-500">★★★★☆</span></td>
+            </tr>
+            <tr>
+              <td>Consistency</td>
+              <td><span class="text-yellow-500">★★☆☆☆</span></td>
+            </tr>
+            <tr>
+              <td>Features/Flexibility</td>
+              <td><span class="text-yellow-500">★★★★☆</span></td>
+            </tr>
+            <tr>
+              <td>Vendor independence</td>
+              <td><span class="text-yellow-500">★★★★☆</span></td>
+            </tr>
+          </tbody>
+        </table>
+        <p class="mt-8">
+          <span class="font-bold">Setup/Configuration: </span>Upstash has a simple process to create a database through their 
+          UI console.  You choose a name, global or regional configuration, primary region and read region(s) along with a few
+          other options.  Connection is maintained through a REST URL and 
+          token.   <a class={linkStyles} href="https://docs.upstash.com/redis/quickstarts/deno-deploy">Quick start</a> guides are available for AWS Lambda,
+          Vercel functions, Next.js, Fly.io, Deno Deploy and a fair few more.  They are the only provider in this experiment other than KV
+          to provide specific instructions for getting up and running on Deno Deploy.
+        </p>
+        <p class="mt-3">
+          <span class="font-bold">Local development: </span>
+              <a class={linkStyles} href="https://docs.upstash.com/redis/sdks/javascriptsdk/developing-or-testing">Local development</a> is achieved through a 
+            community supported project called  <a class={linkStyles} href="https://github.com/hiett/serverless-redis-http">Serverless Redis HTTP (SRH)</a>. 
+            While Upstash offer support to the maintenance they do not maintain this project
+            and one concern would be the single maintainer of the project.  SRH also has a few differences to Upstash Redis.
+            Some instructions are provided for running SRH in docker, but there are gaps leaving you to fill in the blanks.  Additionally
+            you must install your own Redis server locally, for which no documentation or links are given.
+            Compared to the other databases tested, Upstash Redis had the least robust local development experience.
+        </p>
+        <p class="mt-3">
+          <span class="font-bold">Global distribution: </span>Upstash provides 8 regions around the globe (3 US, 2 Europe, 1 Asia,
+          1 S. America, and 1 Australia) to use for primary and
+          read replicas.  As Upstash charge per 100k commands and each replica write consumes a command, adding additional read
+          regions will increase your costs, how much depends on how write-heavy your application is.
+        </p>
+        <p class="mt-3">
+          <span class="font-bold">Ease of use: </span>Upstash was very easy to use with good documentation.  For users with experience
+          of Redis this will be a particularly easy database to use as Upstash Redis is Redis compatible.  To get working with Deno
+          Deploy, only  <a class={linkStyles} href="https://docs.upstash.com/redis/quickstarts/deno-deploy">a few imports</a> and environment variables are needed.
+        </p>
+        <p class="mt-3">
+          <span class="font-bold">Performance: </span>While achieving 4 star performance, this is really a tale of two use cases. Write
+          performance is sub-par (2 stars), while eventual read performance is excellent (5 stars), faster in almost every region than
+          the other databases (N.B. remember that Upstash was configured with 8 read regions, while the others have 3 at most).
+        </p>
+        <p class="mt-3">
+          <span class="font-bold">Consistency: </span>A weak point of Upstash Redis is consistency. Their consistency model is eventual
+          consistency.  Additionally transactions, while supported in the API,  are not ACID compliant.
+        </p>
+        <p class="mt-3">
+          <span class="font-bold">Features/Flexibility: </span>Upstash Redis is fairly feature rich.  Some features include data
+          eviction, encryption at rest, IP whitelisting and backup/restore amongst others.
+        </p>
+        <p class="mt-3">
+          <span class="font-bold">Vendor independence: </span>Like the other databases besides KV, Upstash Redis is portable and you can
+          move it to another edge provider.  Additionally, by using a Redis compatible API, you can in theory move to a different Redis 
+          installation.  One challenge to that is there are little to no other offerings of globally distributed durable Redis.
+        </p>
+        <p class="mt-3">
+          <span class="font-bold">Pricing: </span>Upstash 
+          provides the simplest  <a class={linkStyles} href="https://docs.upstash.com/redis/overall/pricing">pricing model</a> of the databases tested.  With its
+          serverless model, you only pay for what you use.  That said, it also has the most expensive read/writes of the databases tested.
+          Like DynamoDB global tables, the more read replicas you add the more expensive it becomes, linearly 
+          increasing your costs for writes and storage.  Storage at least is very cheap, though unlike DynamoDB does not come with any
+          free amount.
         </p>
       </div>
    </>

@@ -65,7 +65,7 @@ export const handler: Handlers = {
     ]);
 
     //Add new local tests to summary
-    const localPerf = [denoKvPerf, upstashRedisPerf, faunaPerf, planetScalePerf, dynamoDbPerf];
+    const localPerf = [denoKvPerf, dynamoDbPerf, faunaPerf, planetScalePerf, upstashRedisPerf];
     for (const run of localPerf) {
       if (run.eventualReadPerformance === -1 && run.strongReadPerformance === -1) {
         continue;
