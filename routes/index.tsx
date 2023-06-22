@@ -101,6 +101,10 @@ export default function Home(data: PageProps<PerfProps>) {
     <>
       <Head>
         <title>Global database comparison on Deploy</title>
+        <meta name="description" content="Comparing latencies, characteristics and features of Deno KV, DynamoDB, Fauna, PlanetScale and Upstash Redis on Deno Deploy" />
+        <meta property="og:title" content="Global database comparison on Deploy" />
+        <meta property="og:url" content="https://global-db-comparison.deno.dev/" />
+        <meta property="og:image" content="https://global-db-comparison.deno.dev/graph.png" />
         <style>
           {`:root {
             color-scheme: dark;
