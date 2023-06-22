@@ -10,7 +10,7 @@ export default function Databases() {
         from a location closest to the user. Ideally, the database would be located close to the server so that latency between the 
         server and database is minimised for all the database calls made from the server.  Therefore an ideal database for Deno Deploy
         would be one which was globally distributed in multiple regions to decrease latency and thus provide a better user experience. 
-        In this post, we'll experiment with the following subset of serverless databases which all offer multi-region replication and 
+        In this post/web application, we'll experiment with the following serverless databases which all offer multi-region replication and 
         work with Deno Deploy:
       </p>
       <h3 class="mt-3 text-xl font-bold">
@@ -63,8 +63,7 @@ export default function Databases() {
         well as  <a class={linkStyles} href="https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/ql-reference.html">PartiQL</a> (a SQL-compatible
         query language).  DynamoDB tables, by default, are deployed to a single region. To achieve a multi-region 
         setup, you can enable  <a class={linkStyles} href="https://aws.amazon.com/dynamodb/global-tables/">global tables</a> which creates identical tables in additional regions (in as many regions as you like). 
-        Due to the complexity of managing global tables (see analysis below), only a single region in N. Virginia was configured for
-        this experiment.
+        Only a single region in N. Virginia was configured for this experiment.
       </p>
       <p class="mt-3">
         Strong consistency is offered within a single region only but not for secondary indexes.  Global tables are eventually consistent 

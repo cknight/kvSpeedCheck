@@ -60,10 +60,11 @@ export default function Analysis() {
           and limiting data to specific regions for example).
         </p>
         <p class="mt-3">
-          <span class="font-bold">Local development: </span>Local development is also very easy, again there is no setup.  In production, you are using a distributed database built
-          on FoundationDB, however locally you are using a SQLite database which ships with the Deno CLI.  The difference is transparent as the API doesn't change.  
+          <span class="font-bold">Local development: </span>Local development is also very easy, again there is no setup.  In production, you are using a 
+          globally distributed database built
+          on FoundationDB, and locally you are using a SQLite database which ships with the Deno CLI.  The difference is transparent as the API doesn't change.  
           There's nothing you need to do between development and production setup.  As a beta product with few features, 
-          manual effort is needed to populate data into KV stores another dev machine or Deploy branch build.  Manual work
+          manual effort is needed to populate data into KV stores on another dev machine or Deploy branch build.  Manual work
           to manage and delete these branch build KV stores may also be required if they contribute to storage costs.  The Deno core
           team have hinted that they are looking at ways to share KV stores.
         </p>
@@ -89,12 +90,12 @@ export default function Analysis() {
           option of allowing eventual reads for faster access in use cases where strong consistency is not required.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Features/Flexibility: </span>Features and flexibility are one of KV's weakest points.  Like all key-value stores, KV is not best suited to highly relational
+          <span class="font-bold">Features/Flexibility: </span>Features and flexibility are one of KV's weaker points.  Like all key-value stores, KV is not best suited to highly relational
           data.  There are no backup capabilities, data streaming, security configuration, or other advanced features.
           Additionally, of the key-value stores out there, KV has fairly  <a class={linkStyles} href="https://deno.land/api?s=Deno.Kv&unstable=">restrictive limits</a> on key length (2kb) and value length (64kb),
           making it unsuitable for some types of data.  Additionally, there is currently a limit of 10 operations per transaction. While this
           may not seem restrictive at first glance, any operations on an index also need to potentially update secondary indexes at the 
-          same time as well. Thus if you have 3 secondary indexes, you may limited to only 7 operations in a transaction (plus 
+          same time as well. Thus if you have 3 secondary indexes, you may be limited to only 7 operations in a transaction (plus 
           updating the 3 secondary indexes) to maintain consistency.  Finally, as a beta product, KV lacks maturity in dashboard 
           tooling and the ability to export and import data as well as wiping a database.  Expect to see improvements in all these areas
           as KV matures.
@@ -164,9 +165,7 @@ export default function Analysis() {
           similar to a table in a traditional database, via the UI, in their database specific Fauna Query Language (FQL) or via their GraphQL API.
           You can also add a GraphQL schema to your Collection.  Finally, you need to create a security key to access your database via the 
           javascript client or http POST request.  While nothing was overly difficult, the process was not as simple as other databases 
-          and there is a lot of new terminology to learn.  There are few examples of using Fauna with Deno 
-          and even the  <a class={linkStyles} href="https://deno.com/deploy/docs/tutorial-faunadb">guide</a> on 
-          Deno Deploy documentation can be a challenge to follow.
+          and there is a lot of new terminology to learn.
         </p>
         <p class="mt-3">
           <span class="font-bold">Local development: </span>For  <a class={linkStyles} href="https://docs.fauna.com/fauna/current/build/tools/dev">local development</a>,
@@ -176,13 +175,15 @@ export default function Analysis() {
         <p class="mt-3">
           <span class="font-bold">Global distribution: </span>Fauna bills itself as a multi-region distributed database.  However, without upgrading to their enterprise plan (which gets you VM isolated
           single tenant customised deployments anywhere you want), you are limited to either Western centric US or Europe region groups (but not a mixture).  With the region
-          group, there will be 3 replicas of your data within the region.  Speaking with their support, changes are coming to offer
+          group, there will be 3 replicas of your data within the region.  Speaking with their support, potential changes are coming to offer
           an expanded global offering. As of now, however, this may not be ideal if your primary user base is in Asia for example.
         </p>
         <p class="mt-3">
           <span class="font-bold">Ease of use: </span>Fauna had the steepest learning curve of the databases reviewed, however, if you already know GraphQL this will help.
           Fauna's FQL is a powerful language but as a custom built API takes time to learn.  The documentation on the website is OK but lacking
           at times.  It will take considerable time to become comfortable with Fauna as conceptually it is very different to other databases.
+          There are few examples of using Fauna with Deno and even the  <a class={linkStyles} href="https://deno.com/deploy/docs/tutorial-faunadb">guide</a> on 
+          Deno Deploy documentation can be a challenge to follow.
         </p>
         <p class="mt-3">
           <span class="font-bold">Performance: </span>Performance wise, Fauna held its ground well, despite being limited to a single region group.  Writes were slow compared to the other
@@ -273,8 +274,7 @@ export default function Analysis() {
           <span class="font-bold">Setup/Configuration: </span>As you'd expect from AWS, DynamoDB is highly configurable and can
           be created in a number of ways including programmatically. The console is easy to use and well integrated into the other
           services AWS offers.  Creating a DynamoDB table requires setting the partition key (i.e. primary index), so a basic
-          understanding of how DynamoDB works is necessary to start.  There are few examples of using DynamoDB with Deno and
-          even the Deno Deploy example is  <a class={linkStyles} href="https://github.com/denoland/deploy_feedback/issues/390">broken and incomplete</a>.
+          understanding of how DynamoDB works is necessary to start. 
         </p>
         <p class="mt-3">
           <span class="font-bold">Local development: </span>
@@ -300,13 +300,15 @@ export default function Analysis() {
           and well integrated into the other services AWS offers.  Understanding how DynamoDB partition keys work is important to utilising
           the service effectively.  Documentation was generally good, however a reasonable amount of reading was required to understand
           how to use the API.  It felt very counter-intuitive to specify the region in the client.  The API is also very verbose, requiring
-          a lot of code to achieve simple tasks.
+          a lot of code to achieve simple tasks.  There are few examples of using DynamoDB with Deno and
+          even the Deno Deploy example is  <a class={linkStyles} href="https://github.com/denoland/deploy_feedback/issues/390">broken and
+          incomplete</a>.
         </p>
         <p class="mt-3">
           <span class="font-bold">Performance: </span>Another challenging one to rate.  This experiment only used a single region deployment
           of DynamoDB, so it was never going to be competitive in reads with other databases having multiple replica regions.  And yet, it still
           performed well, achieving best or second best write performance in every region.  The biggest let down in performance
-          comes from the first use of the API which incurred a ~400ms delay, effectively a cold start penalty and something not encountered in any 
+          comes from the first use of the API which incurs a ~200-600ms delay, effectively a cold start penalty and something not encountered in any 
           of the other databases.  To make the experiment more consistent and comparable, a dummy request is sent to the API before the 
           experimental requests are sent to eliminate this cold start penalty.  However real world apps will take this hit on every new 
           isolate creation in Deno Deploy so should be carefully considered.
@@ -476,7 +478,7 @@ export default function Analysis() {
             </tr>
             <tr>
               <td>Global distribution</td>
-              <td><span class="text-yellow-500">★★★☆☆</span></td>
+              <td><span class="text-yellow-500">★★★★☆</span></td>
             </tr>
             <tr>
               <td>Ease of use</td>
@@ -508,7 +510,7 @@ export default function Analysis() {
         <p class="mt-3">
           <span class="font-bold">Local development: </span>PlanetScale does not provide a local development option. Your
           choices are to connect to a development branch of your database which requires a network connection and incurs usage charges,
-          or manually setup and connect to a local MySQL instance.
+          or manually setup and connect to a local MySQL instance. No instructions are given for the latter.
         </p>
         <p class="mt-3">
           <span class="font-bold">Global distribution: </span>In addition to selecting your primary region from 11 AWS or 4 GCP (beta) 
@@ -518,8 +520,8 @@ export default function Analysis() {
         </p>
         <p class="mt-3">
           <span class="font-bold">Ease of use: </span>PlanetScale is essentially a MySQL database under the hood and therefore
-          you have all the power and flexibility of a relational database and SQL interface.  One area to be aware of is that
-            <a class={linkStyles} href="https://planetscale.com/docs/concepts/sharding">manual sharding</a> (partioning your data across multiple 
+          you have all the power and flexibility of a relational database and SQL interface.  One area to be aware of is
+          that <a class={linkStyles} href="https://planetscale.com/docs/concepts/sharding">manual sharding</a> (partioning your data across multiple 
           databases to spread the load) is required if your database
           becomes large (~250GB) or hits limits around write or read throughput.  This is the only database in the experiment
           which requires action at scale.  The other databases are fully managed and scale automatically.  Access to the database
@@ -533,12 +535,12 @@ export default function Analysis() {
         </p>
         <p class="mt-3">
           <span class="font-bold">Performance: </span>Across the regions, PlanetScale showed average to good write performance in 
-          comparison to the other databases in this experiment.  However, transactions were very very slow.  Read performance was also
+          comparison to the other databases in this experiment.  However, transactions were very slow.  Read performance was also
           surprisingly slow, slowest of all databases in the experiment (though, like DynamoDB, only one region was configured).  
         </p>
         <p class="mt-3">
           <span class="font-bold">Consistency: </span>PlanetScale's consistency model is eventual consistent. 
-          &nbsp; <a class={linkStyles} href="https://dev.to/harshhhdev/planetscale-vitess-legacy-sharded-databases-and-referential-integrity-ikp">Transactions are
+          &nbsp;<a class={linkStyles} href="https://dev.to/harshhhdev/planetscale-vitess-legacy-sharded-databases-and-referential-integrity-ikp">Transactions are
           not ACID compliant</a>.  Strongly consistent reads are not supported.
         </p>
         <p class="mt-3">
@@ -558,7 +560,7 @@ export default function Analysis() {
           it in a league of its own.  The entry level paid plan gives you 100 billion (yes, billion) reads and 50 million writes. That's 
           850 times more reads per dollar spend than the next most cheapest database for reads (DynamoDB). On the flip side,
           while you also get 10GB storage free, after that the storage is very expensive compared to other databases (10x more expensive
-          than Upstash or DynamoDB for example).  However, many databases will stay under the free 10GB. 
+          than Upstash or DynamoDB for example).  However, many databases will stay under the free 10GB and so this may not be an issue. 
         </p>
       </div>
    </>

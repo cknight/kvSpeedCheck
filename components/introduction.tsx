@@ -7,7 +7,7 @@ export default function Introduction() {
         Before the cloud came along, a typical web application architecture would consist of a web server and a database.
         These typically were hosted in the same datacentre.  This worked well for application teams (with everything
         in the same physical location), but not so well for users far away from the datacentre.  The time 
-        it takes for data to travel a network, known as latency, for requests to the server could significantly impact 
+        it takes for data to travel a network, known as latency, for requests from the browser to the server could significantly impact 
         the user experience.
         <img src="/traditional_architecture.png" alt="Traditional architecture diagram" class=""/>
         To help solve this problem of users far away, a new concept arrived, sometimes referred to as Edge hosting, where your application

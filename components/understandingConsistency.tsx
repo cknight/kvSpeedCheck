@@ -34,7 +34,7 @@ export default function UnderstandingConsistency() {
         The consistency model that you use for your application will depend on your application's requirements and what the database
         is capable of.  If you are building a banking application where it is critical to ensure a financial transaction correctly debits 
         one account and credits another for the same amount, you will likely want to use strong consistency and 
-        &nbsp; <a class={linkStyles} href="https://en.wikipedia.org/wiki/ACID">ACID transactions</a>.  
+        &nbsp;<a class={linkStyles} href="https://en.wikipedia.org/wiki/ACID">ACID transactions</a>.  
         However, if you are building a social media application, eventual consistency of your user's posts may be a better choice as having 
         slightly stale posts is potentially a worthwhile trade-off for the significant performance boost of eventual reads.
       </p>

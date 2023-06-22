@@ -26,9 +26,9 @@ export default function LatencyExperiment() {
 
       <p class="mt-3">
         The experiment aims to test the databases management and latency of global access.  The queries are very simple
-        and the data volumes are very small, both of which are unrealistic in a real-world application.  The experiment is not
-        meant to be a benchmark of the databases per se, but rather a simple test of the latency of the databases from 
-        different regions.
+        and the data volumes are very small, both of which are unrealistic in a real-world application.  By having simple
+        queries and low volume data, the experiment allows the databases to perform at their fastest which in turn allows the
+        experiment to focus on how the database provider manages the latency of global access.
       </p>
 
       <p class="mt-3">

@@ -22,19 +22,19 @@ export default function Conclusion() {
         DynamoDB was one of the first serverless databases.  Clearly it has proven itself and is a solid choice used by many companies
         large and small.  To me, it feels like a database that has been around for a long time and is showing its age.  It's highly
         performant, but has a mixed consistency model and the global tables feels like a bolt on rather than a core feature.  Also, it
-        was the only database in this experiment to incur a cold start penalty (~400ms). That
+        was the only database in this experiment to incur a cold start penalty. That
         said, it's hard to beat it's enterprise features and AWS integrations.  I found the lack of documentation on Deno usage very
-        frustrating, though I expect this to improve dramatically once npm specifiers are supported in Deploy.
+        frustrating, though I expect this to improve dramatically 
+        once <a class={linkStyles} href="https://deno.com/manual/node/npm_specifiers">npm specifiers</a> are supported in Deploy.
       </p>
       <p class="mt-3">
-        I loved how easy it was to get up and running with Upstash and those familiar with Redis will feel right at home.  Their 
+        I loved how easy it was to get up and running with Upstash and those familiar with Redis will feel right at home.  The simplicity of their  
         serverless pricing model is really nice as well as the ability to customise replica regions.  The pricing of reads and writes
-        looks expensive and so enabling lots of replicas could be very costly.  Write performance was also disappointing.
+        is expensive and so enabling lots of replicas could be costly.  Write performance was also disappointing.
       </p>
       <p class="mt-3">
         PlanetScale was a surprise to me having heard great things about it.  Technically it is impressive with Vitess and thus
-        a sharded distributed relational database.  Like DynamoDB, their 'global' offering feels like a bolt on and read performance
-        is slow.  The need to manually shard your database once it degrades or runs into infrastructure problems is a turn off for me
+        a sharded distributed relational database.  Read performance is disappointingly slow.  The need to manually shard your database once it degrades or runs into infrastructure problems is a turn off for me
         and runs counter to the serverless concept. Admittedly, few projects will ever need to undertake this. The schema management 
         features are impressive and it's the definitive database in this
         experiment which can best handle relational data (N.B. Fauna also handles relational data and it would be interesting to pit
@@ -46,10 +46,11 @@ export default function Conclusion() {
         This leaves us with Deno KV.  Going into this experiment, I didn't expect it to hold up as well as it has against the
         big hitters.  Comparing to DynamoDB, it's as fast doing writes and faster doing reads thanks to replica regions (yes, it's
         not a fair comparison without enabling global tables in DynamoDB).  Impressively, it achieves this with a stronger consistency
-        model.  The API is much better than DynamoDB. It's also just such a joy to start coding with since there's nothing to install,
-        setup, configure, etc.  This will boost team creativity and productivity (less barriers) as well as reducing development costs.
+        model.  The API is much easier to use than DynamoDB. It's also just such a joy to start coding with since there's nothing to install,
+        setup, configure, etc.  Whether you are coding for Deploy or locally, the KV database is just there waiting to be used.  This 
+        will boost team creativity and productivity (less barriers) as well as reducing development costs.
         As a beta product, it's still lacking in a number of features but if the pricing model is competitive it's a no brainer choice
-        for use on Deploy assuming it fits your data modelling needs, unless vendor lock-in is a major consideration.
+        for use on Deploy assuming it fits your data modelling needs.
       </p>
       <p class="mt-3">
         Ultimately which database you choose will depend on your use case.  If you need relational capabilities, go with PlanetScale or 

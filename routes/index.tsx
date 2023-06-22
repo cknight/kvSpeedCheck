@@ -126,8 +126,8 @@ export default function Home(data: PageProps<PerfProps>) {
             <li> <a class={linkStyles} href="#understanding_database_consistency">Understanding database consistency</a></li>
             <li> <a class={linkStyles} href="#global_databases_for_deploy">Global database options for Deploy</a></li>
             <li> <a class={linkStyles} href="#latency_experiment">Latency experiment</a></li>
-            <li> <a class={linkStyles} href="#db_latencies_from_your_location">DB latencies from your location</a></li>
-            <li> <a class={linkStyles} href="#db_latencies_from_all_over_the_world">DB latencies from all over the world</a></li>
+            <li> <a class={linkStyles} href="#db_latencies_from_your_location">Latencies from your location</a></li>
+            <li> <a class={linkStyles} href="#db_latencies_from_all_over_the_world">Latencies from all over the world</a></li>
             <li> <a class={linkStyles} href="#analysis">Analysis</a></li>
             <li> <a class={linkStyles} href="#conclusions">Final thoughts</a></li>
           </ul>
