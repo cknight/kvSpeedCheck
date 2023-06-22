@@ -38,6 +38,11 @@ export default function UnderstandingConsistency() {
         However, if you are building a social media application, eventual consistency of your user's posts may be a better choice as having 
         slightly stale posts is potentially a worthwhile trade-off for the significant performance boost of eventual reads.
       </p>
+      <p class="mt-3">
+        For a much more in-depth discussion on database consistency in a globally distributed 
+        database, <a class={linkStyles} href="https://css-tricks.com/consistent-backends-and-ux:-why-should-you-care/">this</a> 4 
+        part series is an excellent read.
+      </p>
     </>
   );
 }
