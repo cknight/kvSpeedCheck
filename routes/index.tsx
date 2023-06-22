@@ -105,6 +105,9 @@ export default function Home(data: PageProps<PerfProps>) {
         <meta property="og:title" content="Global database comparison on Deploy" />
         <meta property="og:url" content="https://global-db-comparison.deno.dev/" />
         <meta property="og:image" content="https://global-db-comparison.deno.dev/graph.png" />
+        <meta property="og:image:type" content="image/png"/>
+        <meta property="og:image:width" content="736"/>
+        <meta property="og:image:height" content="363"/>
         <style>
           {`:root {
             color-scheme: dark;
