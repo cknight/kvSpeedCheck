@@ -91,7 +91,8 @@ export default function Analysis() {
         </p>
         <p class="mt-3">
           <span class="font-bold">Features/Flexibility: </span>Features and flexibility are one of KV's weaker points.  Like all key-value stores, KV is not best suited to highly relational
-          data.  There are no backup capabilities, data streaming, security configuration, or other advanced features.
+          data.  There are no backup capabilities, data streaming, security configuration, or other advanced features, though the
+          core team have confirmed that KV's data is always encrypted at rest.
           Additionally, of the key-value stores out there, KV has fairly  <a class={linkStyles} href="https://deno.land/api?s=Deno.Kv&unstable=">restrictive limits</a> on key length (2kb) and value length (64kb),
           making it unsuitable for some types of data.  Additionally, there is currently a limit of 10 operations per transaction. While this
           may not seem restrictive at first glance, any operations on an index also need to potentially update secondary indexes at the 
