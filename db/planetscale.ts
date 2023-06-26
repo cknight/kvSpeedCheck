@@ -33,7 +33,7 @@ export async function testPlanetscale(): Promise<DbPerfRun> {
     await conn.execute("select VALUE from ID_VALUE where ID=1");
     const readTime = Date.now() - startRead;
   
-    //atomic transactional write
+    //transactional write
     const startAtomic = Date.now();
     await conn.transaction(async (tx:Connection) => {
       const insert1 = await tx.execute(`insert into ID_VALUE (VALUE) values ('${crypto.randomUUID()}')`);

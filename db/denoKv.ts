@@ -8,9 +8,12 @@ export async function testDenoKv(): Promise<DbPerfRun> {
     await kv.set([crypto.randomUUID()], "world");
     const writePerformance = Date.now() - startWrite;
   
-    //measure atomic/transaction write performance
+    //measure transaction performance
     const startAtomicWrite = Date.now();
-    await kv.atomic().set([crypto.randomUUID()], "hello").set([crypto.randomUUID()], "world").commit();
+    await kv.atomic()
+            .set([crypto.randomUUID()], "hello")
+            .set([crypto.randomUUID()], "world")
+            .commit();
     const atomicWritePerformance = Date.now() - startAtomicWrite;
   
     // *******
@@ -38,7 +41,7 @@ export async function testDenoKv(): Promise<DbPerfRun> {
       strongReadPerformance,
     };
     await recordTiming(dbPerf);
-    
+
     return dbPerf;
   } catch (e) {
     console.error(e);

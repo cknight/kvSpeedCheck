@@ -32,7 +32,7 @@ export async function testUpstashRedis(): Promise<DbPerfRun> {
     await upstashRedis.get("foo");
     const readTime = Date.now() - startRead;
     
-    // measure atomic write performance
+    // measure transaction performance
     const startAtomic = Date.now();
     const atomic = upstashRedis.multi();
     atomic.set(crypto.randomUUID(), "hello");
