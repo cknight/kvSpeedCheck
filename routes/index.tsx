@@ -24,40 +24,46 @@ interface PerfProps {
   summary: Map<string, Map<string, DbPerfRunSummary>>;
 }
 
+// Cache the results of previous runs in the isolate for reuse
+const regions = new Map<string, Map<string, DbPerfRunSummary>>();
+let numberOfEntries = 0;
+let entriesListPerf = 0;
+
 export const handler: Handlers = {
   async GET(req, ctx) {
-
-    const regions = new Map<string, Map<string, DbPerfRunSummary>>();
-      
-    //Get previous runs from all users
-    const startEntriesListPerf = Date.now();
-
-    const entries = kv.list({prefix: ["dbPerfRun"]}, {consistency: "eventual"});
-    let numberOfEntries = 0;
-    for await (const entry of entries) {
-      //Fix incorrect casing of Planetscale
-      const dbName = entry.value.dbName === 'Planetscale' ? 'PlanetScale' : entry.value.dbName;
-      const region = regionMapper(entry.value.regionId);
-
-      const statsForRegion = regions.get(entry.value.regionId) || new Map<string, DbPerfRunSummary>();
-      
-      const statsForDb = statsForRegion.get(dbName) || {
-        writePerformanceStats: [],
-        atomicWritePerformanceStats: [],
-        eventualReadPerformanceStats: [],
-        strongReadPerformanceStats: [],
-      };
-      regions.set(entry.value.regionId, statsForRegion);
-      statsForRegion.set(dbName, statsForDb);
-
-      statsForDb.writePerformanceStats.push(entry.value.writePerformance);
-      statsForDb.atomicWritePerformanceStats.push(entry.value.atomicWritePerformance);
-      statsForDb.eventualReadPerformanceStats.push(entry.value.eventualReadPerformance);
-      statsForDb.strongReadPerformanceStats.push(entry.value.strongReadPerformance);
-      numberOfEntries++;
+    if (numberOfEntries === 0) {
+      //Get previous runs from all users
+      const startEntriesListPerf = Date.now();
+  
+      const entries = kv.list({prefix: ["dbPerfRun"]}, {consistency: "eventual"});
+      for await (const entry of entries) {
+        //Fix incorrect casing of Planetscale
+        const dbName = entry.value.dbName === 'Planetscale' ? 'PlanetScale' : entry.value.dbName;
+        const region = regionMapper(entry.value.regionId);
+  
+        const statsForRegion = regions.get(entry.value.regionId) || new Map<string, DbPerfRunSummary>();
+        
+        const statsForDb = statsForRegion.get(dbName) || {
+          writePerformanceStats: [],
+          atomicWritePerformanceStats: [],
+          eventualReadPerformanceStats: [],
+          strongReadPerformanceStats: [],
+        };
+        regions.set(entry.value.regionId, statsForRegion);
+        statsForRegion.set(dbName, statsForDb);
+  
+        statsForDb.writePerformanceStats.push(entry.value.writePerformance);
+        statsForDb.atomicWritePerformanceStats.push(entry.value.atomicWritePerformance);
+        statsForDb.eventualReadPerformanceStats.push(entry.value.eventualReadPerformance);
+        statsForDb.strongReadPerformanceStats.push(entry.value.strongReadPerformance);
+        numberOfEntries++;
+      }
+  
+      entriesListPerf = Math.round(Date.now() - startEntriesListPerf);
+    } else {
+      console.log("Using cached results of", numberOfEntries, "previous runs across", regions.size, "regions");
     }
 
-    const entriesListPerf = Math.round(Date.now() - startEntriesListPerf);
 
     //Run new local tests
     const [denoKvPerf, upstashRedisPerf, faunaPerf, planetScalePerf, dynamoDbPerf] = await Promise.all([
@@ -185,8 +191,8 @@ export default function Home(data: PageProps<PerfProps>) {
           <p class="mt-3">
             Performance results from everyone who has loaded this page are summarised below.  
             <span class="block mt-3 text-xs">(Entries are held in Deno KV which returned and 
-            processed {data.data.numberOfEntries.toLocaleString()} performance entries in {data.data.entriesListPerf}ms using eventual 
-            consistent reads.)</span>
+            processed {data.data.numberOfEntries.toLocaleString()} performance entries across {regions.size} regions
+            in {data.data.entriesListPerf}ms using eventual consistent reads.)</span>
           </p>
           <div class="mt-5">
             <span class="inline">Show results for: <ResultsSelector regions={sortedRegions}/></span>
