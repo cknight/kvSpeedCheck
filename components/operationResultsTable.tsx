@@ -1,75 +1,46 @@
-import { regionMapper, stats } from "../db/util.ts";
-import { DbPerfRunSummary, Stats } from "../types.ts";
+import { regionMapper } from "../utils/util.ts";
+import {
+  ATOMIC_WRITE,
+  EVENTUAL_READ,
+  Stats,
+  STRONG_READ,
+  WRITE,
+} from "../types.ts";
 import RenderStats from "./stats.tsx";
 
 export interface OpResultsTablesProps {
-  summary: Map<string, Map<string, DbPerfRunSummary>>;
+  stats: Map<string, Stats>;
+  regions: Set<string>;
+  dbs: Set<string>;
 }
 
 export default function OperationAndDbResultsTables(
   props: OpResultsTablesProps,
 ) {
-  //Map of db -> Map of region -> performance
-  const eventualReadSummary = new Map<string, Map<string, Stats>>();
-  const writeSummary = new Map<string, Map<string, Stats>>();
-  const atomicWriteSummary = new Map<string, Map<string, Stats>>();
-  const strongReadSummary = new Map<string, Map<string, Stats>>();
-  const dbSet = new Set<string>();
-
-  for (const [region, dbPerfMap] of props.summary) {
-    const dbPerfMapIterable = dbPerfMap.entries();
-    for (const [db, dbPerfRun] of dbPerfMapIterable) {
-      if (!eventualReadSummary.has(db)) {
-        eventualReadSummary.set(db, new Map<string, Stats>());
-      }
-      if (!writeSummary.has(db)) writeSummary.set(db, new Map<string, Stats>());
-      if (!atomicWriteSummary.has(db)) {
-        atomicWriteSummary.set(db, new Map<string, Stats>());
-      }
-      if (!strongReadSummary.has(db)) {
-        strongReadSummary.set(db, new Map<string, Stats>());
-      }
-
-      dbSet.add(db);
-      eventualReadSummary.get(db)!.set(
-        region,
-        stats(dbPerfRun.eventualReadPerformanceStats),
-      );
-      writeSummary.get(db)!.set(region, stats(dbPerfRun.writePerformanceStats));
-      atomicWriteSummary.get(db)!.set(
-        region,
-        stats(dbPerfRun.atomicWritePerformanceStats),
-      );
-      strongReadSummary.get(db)!.set(
-        region,
-        stats(dbPerfRun.strongReadPerformanceStats),
-      );
-    }
-  }
-  const sortedRegions = Array.from(props.summary.keys()).sort((a, b) =>
+  const sortedRegions = Array.from(props.regions.keys()).sort((a, b) =>
     regionMapper(a).localeCompare(regionMapper(b))
   );
-  const sortedDbs = Array.from(dbSet).sort((a, b) => a.localeCompare(b));
+  const sortedDbs = Array.from(props.dbs).sort((a, b) => a.localeCompare(b));
   const operations = [
     {
       id: "eventualReadPerformance",
       name: "Eventual consistency read performance",
-      summary: eventualReadSummary,
+      key: EVENTUAL_READ,
     },
     {
       id: "strongReadPerformance",
       name: "Strong consistency read performance",
-      summary: strongReadSummary,
+      key: STRONG_READ,
     },
     {
       id: "writePerformance",
       name: "Write performance",
-      summary: writeSummary,
+      key: WRITE,
     },
     {
       id: "atomicWritePerformance",
       name: "Transactional write performance",
-      summary: atomicWriteSummary,
+      key: ATOMIC_WRITE,
     },
   ];
 
@@ -106,8 +77,8 @@ export default function OperationAndDbResultsTables(
                             {[...sortedRegions].map((region) => {
                               return (
                                 <RenderStats
-                                  stats={operation.summary.get(db)!.get(
-                                    region,
+                                  stats={props.stats.get(
+                                    region + "." + db + "." + operation.key,
                                   )!}
                                 />
                               );
@@ -157,16 +128,24 @@ export default function OperationAndDbResultsTables(
                               {regionMapper(region)}
                             </td>
                             <RenderStats
-                              stats={writeSummary.get(db)!.get(region)!}
+                              stats={props.stats.get(
+                                region + "." + db + "." + WRITE,
+                              )!}
                             />
                             <RenderStats
-                              stats={atomicWriteSummary.get(db)!.get(region)!}
+                              stats={props.stats.get(
+                                region + "." + db + "." + ATOMIC_WRITE,
+                              )!}
                             />
                             <RenderStats
-                              stats={eventualReadSummary.get(db)!.get(region)!}
+                              stats={props.stats.get(
+                                region + "." + db + "." + EVENTUAL_READ,
+                              )!}
                             />
                             <RenderStats
-                              stats={strongReadSummary.get(db)!.get(region)!}
+                              stats={props.stats.get(
+                                region + "." + db + "." + STRONG_READ,
+                              )!}
                             />
                           </tr>
                         );

@@ -1,5 +1,5 @@
 import { DbPerfRun } from "../types.ts";
-import { getErrorRecord, kv, recordTiming } from "./util.ts";
+import { getErrorRecord, kv, recordTiming } from "../utils/util.ts";
 
 export async function testDenoKv(): Promise<DbPerfRun> {
   try {

@@ -1,19 +1,27 @@
-import { regionMapper, stats } from "../db/util.ts";
-import { DbPerfRunSummary, Stats } from "../types.ts";
+import { regionMapper } from "../utils/util.ts";
+import {
+  ATOMIC_WRITE,
+  EVENTUAL_READ,
+  Stats,
+  STRONG_READ,
+  WRITE,
+} from "../types.ts";
 import RenderStats from "./stats.tsx";
 
 export interface RegionResultTableProps {
-  summary: Map<string, Map<string, DbPerfRunSummary>>;
+  stats: Map<string, Stats>;
+  pageLoads: number;
+  dbs: Set<string>;
   region: string;
 }
 
 export default function RegionResultTable(props: RegionResultTableProps) {
+  const sortedDbs = Array.from(props.dbs).sort((a, b) => a.localeCompare(b));
+
   return (
     <div id={regionMapper(props.region)} class="hidden">
       <p class="text-2xl font-bold">
-        {regionMapper(props.region)}{" "}
-        ({[...props.summary.get(props.region)!.values()][0]
-          .writePerformanceStats.length} page loads)
+        {regionMapper(props.region)} ({props.pageLoads} measurements)
       </p>
       <div class="mt-5 overflow-x-auto border-1 rounded-md">
         <table class="min-w-full text-left text-sm font-light bg-[#202020]">
@@ -27,27 +35,32 @@ export default function RegionResultTable(props: RegionResultTableProps) {
             </tr>
           </thead>
           <tbody>
-            {[...props.summary.get(props.region)!.keys()].map((db) => {
-              const runsForDb = props.summary.get(props.region)!.get(db)!;
-              const writeStats = stats(runsForDb.writePerformanceStats);
-              const atomicWriteStats = stats(
-                runsForDb.atomicWritePerformanceStats,
-              );
-              const eventualReadStats = stats(
-                runsForDb.eventualReadPerformanceStats,
-              );
-              const strongReadStats = stats(
-                runsForDb.strongReadPerformanceStats,
-              );
+            {[...sortedDbs].map((db) => {
               return (
                 <tr class="border-b">
                   <td class="sticky left-0 z-10 whitespace-nowrap px-6 py-3 font-medium bg-[#202020]">
                     {db}
                   </td>
-                  <RenderStats stats={writeStats} />
-                  <RenderStats stats={atomicWriteStats} />
-                  <RenderStats stats={eventualReadStats} />
-                  <RenderStats stats={strongReadStats} />
+                  <RenderStats
+                    stats={props.stats.get(
+                      props.region + "." + db + "." + WRITE,
+                    )!}
+                  />
+                  <RenderStats
+                    stats={props.stats.get(
+                      props.region + "." + db + "." + ATOMIC_WRITE,
+                    )!}
+                  />
+                  <RenderStats
+                    stats={props.stats.get(
+                      props.region + "." + db + "." + EVENTUAL_READ,
+                    )!}
+                  />
+                  <RenderStats
+                    stats={props.stats.get(
+                      props.region + "." + db + "." + STRONG_READ,
+                    )!}
+                  />
                 </tr>
               );
             })}

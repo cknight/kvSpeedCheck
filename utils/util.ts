@@ -1,4 +1,4 @@
-import { DbPerfRun, Stats } from "../types.ts";
+import { DB_PERF_RUN, DbPerfRun, Stats } from "../types.ts";
 
 export const kv = await Deno.openKv();
 
@@ -9,7 +9,7 @@ export async function recordTiming(dbPerfRun: DbPerfRun): Promise<void> {
   if (dbPerfRun.writePerformance < 0) return; // don't record invalid results
 
   for (let attempts = 0; attempts < 10; attempts++) {
-    const key = ["dbPerfRun", Date.now()];
+    const key = [DB_PERF_RUN, Date.now()];
     const result = await kv.atomic()
       .check({ key, versionstamp: null }) // `null` versionstamp mean 'no value'
       .set(key, dbPerfRun)

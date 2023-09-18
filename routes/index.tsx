@@ -14,18 +14,30 @@ import { testDynamoDB } from "../db/dynamodb.ts";
 import { testFauna } from "../db/fauna.ts";
 import { testPlanetscale } from "../db/planetscale.ts";
 import { testUpstashRedis } from "../db/upstashRedis.ts";
-import { kv, linkStyles, regionMapper } from "../db/util.ts";
-import { DbPerfRun, DbPerfRunSummary } from "../types.ts";
+import { kv, linkStyles, regionMapper } from "../utils/util.ts";
+import { DbPerfRun, REGION_PAGE_LOADS, STATS, Stats } from "../types.ts";
 
 interface PerfProps {
   measurement: DbPerfRun[];
   entriesListPerf: number;
   numberOfEntries: number;
-  summary: Map<string, Map<string, DbPerfRunSummary>>;
+  regionPageLoads: Map<string, number>;
+  perfStats: Map<string, Stats>;
+  regions: Set<string>;
+  dbs: Set<string>;
 }
 
 // Cache the results of previous runs in the isolate for reuse
-const regions = new Map<string, Map<string, DbPerfRunSummary>>();
+
+//Map of <regionId>.<dbName>.<op> to Stats
+const perfStats = new Map<string, Stats>();
+
+//Map of number of page loads per region
+let regionPageLoads: Map<string, number> = new Map();
+
+const regions: Set<string> = new Set();
+const dbs: Set<string> = new Set();
+
 let numberOfEntries = 0;
 let entriesListPerf = 0;
 
@@ -35,43 +47,30 @@ export const handler: Handlers = {
       //Get previous runs from all users
       const startEntriesListPerf = Date.now();
 
-      const entries = kv.list({ prefix: ["dbPerfRun"] }, {
+      const result = await kv.get([REGION_PAGE_LOADS]);
+      if (result.value) {
+        regionPageLoads = result.value as Map<string, number>;
+      }
+
+      const entries = kv.list({ prefix: [STATS] }, {
         consistency: "eventual",
       });
       for await (const entry of entries) {
-        const run = entry.value as DbPerfRun;
-        //Fix incorrect casing of Planetscale
-        const dbName = run.dbName === "Planetscale"
-          ? "PlanetScale"
-          : run.dbName;
-        const region = regionMapper(run.regionId);
-
-        const statsForRegion = regions.get(run.regionId) ||
-          new Map<string, DbPerfRunSummary>();
-
-        const statsForDb = statsForRegion.get(dbName) || {
-          writePerformanceStats: [],
-          atomicWritePerformanceStats: [],
-          eventualReadPerformanceStats: [],
-          strongReadPerformanceStats: [],
-        };
-        regions.set(run.regionId, statsForRegion);
-        statsForRegion.set(dbName, statsForDb);
-
-        statsForDb.writePerformanceStats.push(run.writePerformance);
-        statsForDb.atomicWritePerformanceStats.push(
-          run.atomicWritePerformance,
-        );
-        statsForDb.eventualReadPerformanceStats.push(
-          run.eventualReadPerformance,
-        );
-        statsForDb.strongReadPerformanceStats.push(
-          run.strongReadPerformance,
-        );
         numberOfEntries++;
+        const statsKey = entry.key[1] as string;
+        const regionId = statsKey.split(".")[0]; //<regionId>.<dbName>.<op>
+        const db = statsKey.split(".")[1]; //<regionId>.<dbName>.<op>
+        const run = entry.value as Stats;
+        perfStats.set(statsKey, run);
+
+        regions.add(regionId);
+        dbs.add(db);
       }
 
       entriesListPerf = Math.round(Date.now() - startEntriesListPerf);
+      console.log(
+        `Retrieved ${numberOfEntries} stats entries in ${entriesListPerf}ms`,
+      );
     } else {
       console.log(
         "Using cached results of",
@@ -105,39 +104,24 @@ export const handler: Handlers = {
       planetScalePerf,
       upstashRedisPerf,
     ];
-    for (const run of localPerf) {
-      if (
-        run.eventualReadPerformance === -1 && run.strongReadPerformance === -1
-      ) {
-        continue;
-      }
-
-      if (regions.get(run.regionId) != undefined) {
-        regions.get(run.regionId)!.get(run.dbName)!.writePerformanceStats.push(
-          run.writePerformance,
-        );
-        regions.get(run.regionId)!.get(run.dbName)!.atomicWritePerformanceStats
-          .push(run.atomicWritePerformance);
-        regions.get(run.regionId)!.get(run.dbName)!.eventualReadPerformanceStats
-          .push(run.eventualReadPerformance);
-        regions.get(run.regionId)!.get(run.dbName)!.strongReadPerformanceStats
-          .push(run.strongReadPerformance);
-      }
-    }
 
     return await ctx.render({
       measurement: localPerf,
       entriesListPerf,
       numberOfEntries,
-      summary: regions,
+      regionPageLoads,
+      perfStats,
+      regions,
+      dbs,
     });
   },
 };
 
 export default function Home(data: PageProps<PerfProps>) {
-  const { measurement, summary } = data.data;
-  const sortedRegions = Array.from(summary.keys()).sort((a, b) =>
-    a.localeCompare(b)
+  const { measurement } = data.data;
+  //sort regions
+  const sortedRegions = Array.from(data.data.regions).sort((a, b) =>
+    regionMapper(a).localeCompare(regionMapper(b))
   );
 
   function outputPerformance(performance: number): string {
@@ -149,6 +133,11 @@ export default function Home(data: PageProps<PerfProps>) {
       return performance + "ms";
     }
   }
+
+  const totalPageLoads = Array.from(data.data.regionPageLoads.values()).reduce(
+    (a, b) => a + b,
+    0,
+  );
 
   return (
     <>
@@ -300,12 +289,12 @@ export default function Home(data: PageProps<PerfProps>) {
           </h2>
           <p class="mt-3">
             Performance results from everyone who has loaded this page are
-            summarised below.
+            summarised below, with stats updated daily.
             <span class="block mt-3 text-xs">
-              (Entries are held in Deno KV which returned and processed{" "}
-              {data.data.numberOfEntries.toLocaleString()}{" "}
+              (Performance entries are held in Deno KV which returned and
+              processed statistics for{"  "}{totalPageLoads}{" "}
               performance entries across {regions.size} regions in{" "}
-              {data.data.entriesListPerf}ms using eventual consistent reads.)
+              {data.data.entriesListPerf}ms.)
             </span>
           </p>
           <div class="mt-5">
@@ -314,9 +303,18 @@ export default function Home(data: PageProps<PerfProps>) {
             </span>
           </div>
           <div id="results" class="mt-5">
-            <OperationAndDbResultsTables summary={summary} />
+            <OperationAndDbResultsTables
+              stats={data.data.perfStats}
+              regions={data.data.regions}
+              dbs={data.data.dbs}
+            />
             {sortedRegions.map((region) => (
-              <RegionResultTable region={region} summary={summary} />
+              <RegionResultTable
+                region={region}
+                stats={data.data.perfStats}
+                dbs={data.data.dbs}
+                pageLoads={data.data.regionPageLoads.get(region)!}
+              />
             ))}
           </div>
 
