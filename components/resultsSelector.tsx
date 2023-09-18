@@ -1,5 +1,5 @@
 import { Head } from "$fresh/runtime.ts";
-import { regionMapper } from "../db/util.ts";
+import { regionMapper } from "../utils/util.ts";
 
 export interface ResultsSelectorProps {
   regions: string[];

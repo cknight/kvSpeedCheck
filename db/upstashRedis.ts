@@ -5,7 +5,7 @@ import {
   getDefaultRecord,
   getErrorRecord,
   recordTiming,
-} from "./util.ts";
+} from "../utils/util.ts";
 
 export async function testUpstashRedis(): Promise<DbPerfRun> {
   const dbName = "Upstash Redis";

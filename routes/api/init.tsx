@@ -8,7 +8,6 @@ export const handler: Handlers = {
     if (token === Deno.env.get("TOKEN")) {
       const start = Date.now();
       await computeStats();
-      console.log("Computed stats in " + (Date.now() - start) + "ms");
       return new Response("Stats updated!");
     } else {
       return new Response("Request not authorized", { status: 403 });

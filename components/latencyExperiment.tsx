@@ -1,4 +1,4 @@
-import { linkStyles } from "../db/util.ts";
+import { linkStyles } from "../utils/util.ts";
 
 export default function LatencyExperiment() {
   return (

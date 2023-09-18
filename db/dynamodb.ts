@@ -11,7 +11,7 @@ import {
   getDefaultRecord,
   getErrorRecord,
   recordTiming,
-} from "./util.ts";
+} from "../utils/util.ts";
 
 export async function testDynamoDB(): Promise<DbPerfRun> {
   const dbName = "DynamoDB";
