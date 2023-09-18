@@ -38,7 +38,7 @@ export async function dbMonthlyLimitExceeded(
       dbName,
       "current-month-requests",
     ]);
-    if (currentMonthRequests.value > maxMonthlyLimit) {
+    if (Number(currentMonthRequests.value) > maxMonthlyLimit) {
       console.log(
         `${dbName} quota exceeded for this month, skipping measurement.`,
       );
@@ -47,7 +47,7 @@ export async function dbMonthlyLimitExceeded(
 
     await kv.set(
       [dbName, "current-month-requests"],
-      currentMonthRequests.value + 3,
+      Number(currentMonthRequests.value) + 3,
     );
   }
   return false;
