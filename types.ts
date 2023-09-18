@@ -8,7 +8,6 @@ export interface DbPerfRun {
 }
 
 export interface DbPerfRunSummary {
-
   writePerformanceStats: number[];
   atomicWritePerformanceStats: number[];
   eventualReadPerformanceStats: number[];

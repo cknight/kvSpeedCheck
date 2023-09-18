@@ -2,39 +2,53 @@ import { DbPerfRun, Stats } from "../types.ts";
 
 export const kv = await Deno.openKv();
 
-export const linkStyles = "text([#0000ee] visited:[#551A8B] dark:[#8cb4ff] dark:visited:[#cda9ef])";
+export const linkStyles =
+  "text([#0000ee] visited:[#551A8B] dark:[#8cb4ff] dark:visited:[#cda9ef])";
 
 export async function recordTiming(dbPerfRun: DbPerfRun): Promise<void> {
   if (dbPerfRun.writePerformance < 0) return; // don't record invalid results
 
-  for(let attempts = 0; attempts < 10; attempts++) {
+  for (let attempts = 0; attempts < 10; attempts++) {
     const key = ["dbPerfRun", Date.now()];
     const result = await kv.atomic()
-                      .check({ key, versionstamp: null }) // `null` versionstamp mean 'no value'
-                      .set(key, dbPerfRun)
-                      .commit();
+      .check({ key, versionstamp: null }) // `null` versionstamp mean 'no value'
+      .set(key, dbPerfRun)
+      .commit();
     if (result.ok) {
       return;
     } else {
       console.log(`Duplicate entry found for key ${key}, retrying...`);
     }
   }
-  console.log('Failed to persist dbPerfRun after 10 attempts, giving up.')
+  console.log("Failed to persist dbPerfRun after 10 attempts, giving up.");
 }
 
-export async function dbMonthlyLimitExceeded(dbName: string, maxMonthlyLimit: number): Promise<boolean> {
+export async function dbMonthlyLimitExceeded(
+  dbName: string,
+  maxMonthlyLimit: number,
+): Promise<boolean> {
   const currentMonth = await kv.get([dbName, "current-month"]);
-  if (currentMonth.value === null || currentMonth.value !== new Date().getMonth()) {
+  if (
+    currentMonth.value === null || currentMonth.value !== new Date().getMonth()
+  ) {
     await kv.set([dbName, "current-month"], new Date().getMonth());
     await kv.set([dbName, "current-month-requests"], 0);
   } else {
-    const currentMonthRequests = await kv.get([dbName, "current-month-requests"]);
+    const currentMonthRequests = await kv.get([
+      dbName,
+      "current-month-requests",
+    ]);
     if (currentMonthRequests.value > maxMonthlyLimit) {
-      console.log(`${dbName} quota exceeded for this month, skipping measurement.`);
+      console.log(
+        `${dbName} quota exceeded for this month, skipping measurement.`,
+      );
       return true;
-    } 
-    
-    await kv.set([dbName, "current-month-requests"], currentMonthRequests.value + 3);
+    }
+
+    await kv.set(
+      [dbName, "current-month-requests"],
+      currentMonthRequests.value + 3,
+    );
   }
   return false;
 }
@@ -62,27 +76,33 @@ export function getErrorRecord(dbName: string): DbPerfRun {
 }
 
 export function stats(stats: number[]): Stats {
-  if (stats.length === 0 || stats.includes(-1)) return {
-    min: -1,
-    max: -1,
-    avg: -1,
-    p95: -1,
-  };
+  if (stats.length === 0 || stats.includes(-1)) {
+    return {
+      min: -1,
+      max: -1,
+      avg: -1,
+      p95: -1,
+    };
+  }
 
   const min = Math.round(Math.min(...stats));
-  const avg = Math.round((stats.reduce((a, b) => a + b, 0) / stats.length));
-  const p95 = Math.round(stats.length > 10 ? stats.sort((a, b) => a - b)[Math.floor(stats.length * 0.95) - 1] : -1);
+  const avg = Math.round(stats.reduce((a, b) => a + b, 0) / stats.length);
+  const p95 = Math.round(
+    stats.length > 10
+      ? stats.sort((a, b) => a - b)[Math.floor(stats.length * 0.95) - 1]
+      : -1,
+  );
   const max = Math.round(Math.max(...stats));
 
   return {
     min,
     max,
     avg,
-    p95
-  }
+    p95,
+  };
 }
 
-export function regionMapper(region:string):string {
+export function regionMapper(region: string): string {
   switch (region) {
     case "asia-south1":
       return "Mumbai";
@@ -135,7 +155,7 @@ export function regionMapper(region:string):string {
     case "southamerica-east1":
       return "Sao Paulo";
     case "southamerica-west1":
-      return "Santiago"
+      return "Santiago";
     case "us-central1":
       return "Iowa";
     case "us-east1":

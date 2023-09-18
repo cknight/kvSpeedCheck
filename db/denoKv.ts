@@ -7,31 +7,31 @@ export async function testDenoKv(): Promise<DbPerfRun> {
     const startWrite = Date.now();
     await kv.set([crypto.randomUUID()], "world");
     const writePerformance = Date.now() - startWrite;
-  
+
     //measure transaction performance
     const startAtomicWrite = Date.now();
     await kv.atomic()
-            .set([crypto.randomUUID()], "hello")
-            .set([crypto.randomUUID()], "world")
-            .commit();
+      .set([crypto.randomUUID()], "hello")
+      .set([crypto.randomUUID()], "world")
+      .commit();
     const atomicWritePerformance = Date.now() - startAtomicWrite;
-  
+
     // *******
     // The next two reads rely on a pre-existing key 'hello' in the KV store.
     // *******
-  
+
     //measure eventual read performance
     const startEventualRead = Date.now();
-    await kv.get(["hello"], {consistency: "eventual"});
+    await kv.get(["hello"], { consistency: "eventual" });
     const eventualReadPerformance = Date.now() - startEventualRead;
-  
+
     //measure strong read performance
     const startStrongRead = Date.now();
-    await kv.get(["hello"], {consistency: "strong"});
+    await kv.get(["hello"], { consistency: "strong" });
     const strongReadPerformance = Date.now() - startStrongRead;
-  
+
     const regionId = Deno.env.get("DENO_REGION") || "unknown";
-  
+
     const dbPerf: DbPerfRun = {
       dbName: "Deno KV",
       regionId,
