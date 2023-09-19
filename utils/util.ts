@@ -3,7 +3,7 @@ import { DB_PERF_RUN, DbPerfRun, Stats } from "../types.ts";
 export const kv = await Deno.openKv();
 
 export const linkStyles =
-  "text([#0000ee] visited:[#551A8B] dark:[#8cb4ff] dark:visited:[#cda9ef])";
+  "text([#0000ee] visited:[#551A8B] dark:[#63EDFD] dark:visited:[#cda9ef]) underline";
 
 export async function recordTiming(dbPerfRun: DbPerfRun): Promise<void> {
   if (dbPerfRun.writePerformance < 0) return; // don't record invalid results
