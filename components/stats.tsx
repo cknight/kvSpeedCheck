@@ -5,7 +5,7 @@ export interface RenderStatsProps {
 }
 
 export default function RenderStats(props: RenderStatsProps) {
-  if (props.stats.avg < 0) {
+  if (!props.stats || props.stats.avg < 0) {
     return (
       <td>
         <p class="text-xl mt-2">-</p>

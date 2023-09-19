@@ -70,7 +70,7 @@ export default function Databases() {
       <p class="mt-3">
         <a class={linkStyles} href="https://deno.com/kv">Deno KV</a>{" "}
         is a new global key-value database from the Deno team (currently in
-        private beta). Reads are strongly consistent within the primary region
+        open beta). Reads are strongly consistent within the primary region
         and eventually consistent in replica regions. You can easily choose
         which consistency level you want for your reads. It is built on top of
         the open source{" "}
@@ -78,8 +78,9 @@ export default function Databases() {
           FoundationDB
         </a>{" "}
         (used by Apple's iCloud) and there is no configuration or setup. Data is
-        replicated to at least 6 datacentres across 3 regions (US, Europe and
-        Asia). Access is via a custom but{" "}
+        replicated to at least 2 datacentres in each replica region. Deno KV currently
+        has 4 replica regions (US East, US West, Europe and
+        Asia) available. Access is via a custom but{" "}
         <a class={linkStyles} href="https://deno.land/api?s=Deno.Kv&unstable=">
           simple API layer
         </a>. ACID transactions are supported globally and offer{" "}
@@ -366,7 +367,7 @@ export default function Databases() {
                   Deno KV
                 </td>
                 <td>Key/Value</td>
-                <td>US*, Europe, Asia</td>
+                <td>US East*, Europe, Asia</td>
                 <td>Strong (with optional eventual)</td>
                 <td>Custom simple API</td>
                 <td>Strictly serializable ACID transactions</td>

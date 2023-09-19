@@ -103,7 +103,7 @@ export default function Analysis() {
             <tr>
               <td>Features/Flexibility</td>
               <td>
-                <span class="text-yellow-500">★★☆☆☆</span>
+                <span class="text-yellow-500">★★★☆☆</span>
               </td>
             </tr>
             <tr>
@@ -115,7 +115,7 @@ export default function Analysis() {
           </tbody>
         </table>
         <p class="mt-8">
-          <span class="font-bold">Setup/Configuration:</span>Deno KV easily tops
+          <span class="font-bold">Setup/Configuration: </span>Deno KV easily tops
           the bunch when it comes to setup and configuration, simply because
           there is none. You do not have to create a database, manage connection
           strings, create credentials, choose regions, manage usernames and
@@ -126,7 +126,7 @@ export default function Analysis() {
           region and limiting data to specific regions for example).
         </p>
         <p class="mt-3">
-          <span class="font-bold">Local development:</span>Local development is
+          <span class="font-bold">Local development: </span>Local development is
           also very easy, again there is no setup. In production, you are using
           a globally distributed database built on FoundationDB, and locally you
           are using a SQLite database which ships with the Deno CLI. The
@@ -135,19 +135,21 @@ export default function Analysis() {
           product with few features, manual effort is needed to populate data
           into KV stores on another dev machine or Deploy branch build. Manual
           work to manage and delete these branch build KV stores may also be
-          required if they contribute to storage costs. The Deno core team have
-          hinted that they are looking at ways to share KV stores.
+          required if they contribute to storage costs. Using an access token you
+          can access your remote KV store locally, which is very handy for testing
+          and local development.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Global distribution:</span>With database
+          <span class="font-bold">Global distribution: </span>With database
           replicas on 3 continents, KV counts as being a truly global database.
-          However, there is no configuration to let you customise where these
-          replicas are, nor which is the primary replica (currently US only).
+          Deploy Free tier customers are limited to a single read/write region.
+          Deploy Pro users can configure which read regions are enabled (up to 4), while
+          enterprise customers can further configure which region is the primary replica.
           The Deno team have hinted they are looking at adding additional
           replicas and capabilities to manage regions.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Ease of use:</span>Ease of use also scored
+          <span class="font-bold">Ease of use: </span>Ease of use also scored
           very high. The API is simple and intuitive and the nascent
           documentation is decent. Where Deno KV is less user friendly is the
           manual management required for{" "}
@@ -170,7 +172,7 @@ export default function Analysis() {
           </a>.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Performance:</span>KV is impressively fast.
+          <span class="font-bold">Performance: </span>KV is impressively fast.
           Strongly consistent read, write performance and transactions are all
           either the fastest or very close to the fastest measured in any region
           of the databases tested. Eventual read performance is also very fast,
@@ -178,13 +180,13 @@ export default function Analysis() {
           configured.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Consistency:</span>KV is strongly consistent,
+          <span class="font-bold">Consistency: </span>KV is strongly consistent,
           up there with Fauna as the most consistent database tested. However,
           unlike Fauna, KV has the nice option of allowing eventual reads for
           faster access in use cases where strong consistency is not required.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Features/Flexibility:</span>Features and
+          <span class="font-bold">Features/Flexibility: </span>Features and
           flexibility are one of KV's weaker points. Like all key-value stores,
           KV is not best suited to highly relational data. There are no backup
           capabilities, data streaming, security configuration, or other
@@ -198,23 +200,21 @@ export default function Analysis() {
             restrictive limits
           </a>{" "}
           on key length (2kb) and value length (64kb), making it unsuitable for
-          some types of data. Additionally, there is currently a limit of 10
-          operations per transaction. While this may not seem restrictive at
-          first glance, any operations on an index also need to potentially
-          update secondary indexes at the same time as well. Thus if you have 3
-          secondary indexes, you may be limited to only 7 operations in a
-          transaction (plus updating the 3 secondary indexes) to maintain
-          consistency. Finally, as a beta product, KV lacks maturity in
-          dashboard tooling and the ability to export and import data as well as
-          wiping a database. Expect to see improvements in all these areas as KV
+          some types of data. There is also a limit of 1000
+          operations per transaction (or 800kb transaction size, whichever is hit first). 
+          KV recently introduced the ability to remotely connect to a KV store on Deploy,
+          allowing <a class={linkStyles} href="https://www.youtube.com/watch?v=gFvVYoG0UrM">containerised apps to connect to KV</a> for example.  It's also useful for
+          import and export of data to KV.
+          Finally, as a beta product, KV lacks maturity in
+          dashboard tooling. Expect to see improvements in all these areas as KV
           matures.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Vendor independence:</span>KV's weakest point
+          <span class="font-bold">Vendor independence: </span>KV's weakest point
           is perhaps it's vendor lock-in. As a globally distributed database, KV
-          is only available in Deno Deploy. However, you can deploy your Deno
-          app yourself to any server and use the KV API with a local SQLite
-          database, though you will not get global distribution of your data.
+          is only available in Deno Deploy. However, with the new addition of remote
+          connections to KV, it's possible access KV from other edge platforms via
+          containerised Deno deployments.  Access from other runtimes is not supported.
           Deno also has a custom API meaning you cannot simply swap out KV for
           another database if in the future you migrate off of Deploy or away
           from KV. That said, the API is very simple so migrations may not be
@@ -222,8 +222,15 @@ export default function Analysis() {
           allowing KV to be used outside of Deploy in the future.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Pricing:</span>No pricing has been announced
-          for Deno KV on Deploy yet.
+          <span class="font-bold">Pricing: </span><a class={linkStyles} href="https://deno.com/deploy/pricing">Pricing</a> has now been announced for 
+          Deno KV.  Free tier is capped at 1GB of storage, while the $20/month Pro tier
+          comes with 5GB included.  In an unusual move, KV places usage caps per day rather
+          than per month. Also of note, the Pro tier isn't just for the database, but for
+          Deploy hosting as well.  E.g. for the Pro plan, if you stay within the 5GB limit and
+          45K/read, 15k/write per day, you effectively get KV for free if you are paying to host
+          anyway.  Exceeding the KV plan limits appears to be much more expensive than most of the 
+          competing databases (except perhaps Upstash Redis), though this significantly depends on your workload and comparisons
+          are hard.
         </p>
       </div>
 
@@ -275,7 +282,7 @@ export default function Analysis() {
             >
             </path>
           </g>
-        </svg>DynamoDB analysis
+        </svg>DynamoDB
       </h3>
       <div class="mt-8" id="DynamoDBAnalysis">
         <table class="text-left bg-[#202020]">
@@ -339,7 +346,7 @@ export default function Analysis() {
           </tbody>
         </table>
         <p class="mt-8">
-          <span class="font-bold">Setup/Configuration:</span>As you'd expect
+          <span class="font-bold">Setup/Configuration: </span>As you'd expect
           from AWS, DynamoDB is highly configurable and can be created in a
           number of ways including programmatically. The console is easy to use
           and well integrated into the other services AWS offers. Creating a
@@ -348,7 +355,7 @@ export default function Analysis() {
           start.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Local development:</span>
+          <span class="font-bold">Local development: </span>
           AWS{" "}
           <a
             class={linkStyles}
@@ -361,7 +368,7 @@ export default function Analysis() {
           sharing.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Global distribution:</span>This was a
+          <span class="font-bold">Global distribution: </span>This was a
           complicated one to rate. On the one hand, DynamoDB offers "global
           tables" which are replicated tables, offered across 16 different
           regions. Picking and choosing which regions you want including which
@@ -384,7 +391,7 @@ export default function Analysis() {
           the outage.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Ease of use:</span>Ease of use was average
+          <span class="font-bold">Ease of use: </span>Ease of use was average
           amongst the databases tested. The console is easy to use and well
           integrated into the other services AWS offers. Understanding how
           DynamoDB partition keys work is important to utilising the service
@@ -402,7 +409,7 @@ export default function Analysis() {
           </a>.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Performance:</span>Another challenging one to
+          <span class="font-bold">Performance: </span>Another challenging one to
           rate. This experiment only used a single region deployment of
           DynamoDB, so it was never going to be competitive in reads with other
           databases having multiple replica regions. And yet, it still performed
@@ -417,7 +424,7 @@ export default function Analysis() {
           considered.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Consistency:</span>DynamoDB's consistency
+          <span class="font-bold">Consistency: </span>DynamoDB's consistency
           model is somewhat complicated. If using a single region only you get
           strong consistency writes and optionally reads too (default is
           eventual consistency reads). However, if using global tables, and you
@@ -428,7 +435,7 @@ export default function Analysis() {
           writes to the same data occur in multiple regions.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Features/Flexibility:</span>Again, as you
+          <span class="font-bold">Features/Flexibility: </span>Again, as you
           would expect from AWS, DynamoDB has many features and is very
           flexible. It is especially good at integrating into other AWS
           services. Data can be imported/exported to S3. Other features include
@@ -436,7 +443,7 @@ export default function Analysis() {
           on-demand backup and restore, and much more.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Vendor independence:</span>Like Deno KV,
+          <span class="font-bold">Vendor independence: </span>Like Deno KV,
           DynamoDB is not vendor independent. Once you start using it, migrating
           away will be difficult. However, while migrating to a different
           database is difficult, migrating to a different edge server (e.g.
@@ -444,7 +451,7 @@ export default function Analysis() {
           it's http interface.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Pricing:</span>{" "}
+          <span class="font-bold">Pricing: </span>{" "}
           <a class={linkStyles} href="https://aws.amazon.com/dynamodb/pricing/">
             DynamoDB costs
           </a>{" "}
@@ -533,7 +540,7 @@ export default function Analysis() {
           </tbody>
         </table>
         <p class="mt-8">
-          <span class="font-bold">Setup/Configuration:</span>Creating a Fauna
+          <span class="font-bold">Setup/Configuration: </span>Creating a Fauna
           database is straightforward via their web UI. Once the database is
           created you need to create a{" "}
           <a
@@ -550,7 +557,7 @@ export default function Analysis() {
           is a lot of new terminology to learn.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Local development:</span>For{" "}
+          <span class="font-bold">Local development: </span>For{" "}
           <a
             class={linkStyles}
             href="https://docs.fauna.com/fauna/current/build/tools/dev"
@@ -561,7 +568,7 @@ export default function Analysis() {
           run it with persisted data or start with a clean sheet.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Global distribution:</span>Fauna bills itself
+          <span class="font-bold">Global distribution: </span>Fauna bills itself
           as a multi-region distributed database. However, without upgrading to
           their enterprise plan (which gets you VM isolated single tenant
           customised deployments anywhere you want), you are limited to either
@@ -572,7 +579,7 @@ export default function Analysis() {
           ideal if your primary user base is in Asia for example.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Ease of use:</span>Fauna had the steepest
+          <span class="font-bold">Ease of use: </span>Fauna had the steepest
           learning curve of the databases reviewed, however, if you already know
           GraphQL this will help. Fauna's FQL is a powerful language but as a
           custom built API takes time to learn. The documentation on the website
@@ -589,7 +596,7 @@ export default function Analysis() {
           on Deno Deploy documentation can be a challenge to follow.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Performance:</span>Performance wise, Fauna
+          <span class="font-bold">Performance: </span>Performance wise, Fauna
           held its ground well, despite being limited to a single region group.
           Writes were slow compared to the other databases, but strong reads
           were fast, though as Fauna does not offer eventual consistency reads
@@ -597,14 +604,14 @@ export default function Analysis() {
           consistency is acceptable.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Consistency:</span>Fauna, like KV, offers very
+          <span class="font-bold">Consistency: </span>Fauna, like KV, offers very
           strong consistency but as mentioned previously there is no option for
           eventual read consistency. This is likely due to the fact that Fauna
           is an active-active database where writes only complete after
           replication to all replicas. Everything in Fauna is a transaction.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Features/Flexibility:</span>Where Fauna really
+          <span class="font-bold">Features/Flexibility: </span>Where Fauna really
           shines is in it's features and flexibility. If you invest the time to
           properly learn Fauna, it will reward you with capabilities not found
           in other NoSQL databases such as joins, indexes, normalised data, SQL
@@ -613,7 +620,7 @@ export default function Analysis() {
           time), and more.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Vendor independence:</span>Fauna is a
+          <span class="font-bold">Vendor independence: </span>Fauna is a
           proprietary database with a custom API and many features. Once your
           application is deeply embedded into Fauna migrating to another
           database will be difficult and costly. On the plus side, unlike KV you
@@ -624,7 +631,7 @@ export default function Analysis() {
           you can extract your data from Fauna and move it elsewhere.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Pricing:</span>There are{" "}
+          <span class="font-bold">Pricing: </span>There are{" "}
           <a
             class={linkStyles}
             href="https://docs.fauna.com/fauna/current/learn/understanding/billing"
@@ -716,21 +723,21 @@ export default function Analysis() {
           </tbody>
         </table>
         <p class="mt-8">
-          <span class="font-bold">Setup/Configuration:</span>Setup of a
+          <span class="font-bold">Setup/Configuration: </span>Setup of a
           PlanetScale database is straightforward via their UI. In addition to a
           name, you also select a primary region. Free plans are limited to a
           single region and single database. Like any SQL database, you need to
           define a schema using traditional SQL (e.g. "CREATE TABLE ...").
         </p>
         <p class="mt-3">
-          <span class="font-bold">Local development:</span>PlanetScale does not
+          <span class="font-bold">Local development: </span>PlanetScale does not
           provide a local development option. Your choices are to connect to a
           development branch of your database which requires a network
           connection and incurs usage charges, or manually setup and connect to
           a local MySQL instance. No instructions are given for the latter.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Global distribution:</span>In addition to
+          <span class="font-bold">Global distribution: </span>In addition to
           selecting your primary region from 11 AWS or 4 GCP (beta) regions, you
           can also enable one or more read-only replica regions. One downside to
           PlanetScale's global setup is that, similar to DynamoDB, you must
@@ -739,7 +746,7 @@ export default function Analysis() {
           closest region automatically.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Ease of use:</span>PlanetScale is essentially
+          <span class="font-bold">Ease of use: </span>PlanetScale is essentially
           a MySQL database under the hood and therefore you have all the power
           and flexibility of a relational database and SQL interface. One area
           to be aware of is that{" "}
@@ -773,7 +780,7 @@ export default function Analysis() {
           via the console and until then it's completely inaccessible.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Performance:</span>Across the regions,
+          <span class="font-bold">Performance: </span>Across the regions,
           PlanetScale showed average to good write performance in comparison to
           the other databases in this experiment. However, transactions were
           very slow. Read performance was also surprisingly slow, slowest of all
@@ -781,7 +788,7 @@ export default function Analysis() {
           was configured).
         </p>
         <p class="mt-3">
-          <span class="font-bold">Consistency:</span>PlanetScale's consistency
+          <span class="font-bold">Consistency: </span>PlanetScale's consistency
           model is eventual consistent. &nbsp;<a
             class={linkStyles}
             href="https://dev.to/harshhhdev/planetscale-vitess-legacy-sharded-databases-and-referential-integrity-ikp"
@@ -790,7 +797,7 @@ export default function Analysis() {
           </a>. Strongly consistent reads are not supported.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Features/Flexibility:</span>PlanetScale's
+          <span class="font-bold">Features/Flexibility: </span>PlanetScale's
           standout feature is its{" "}
           <a
             class={linkStyles}
@@ -804,14 +811,14 @@ export default function Analysis() {
           nice tool giving query level performance metrics.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Vendor independence:</span>By being MySQL
+          <span class="font-bold">Vendor independence: </span>By being MySQL
           compatible, PlanetScale is perhaps the most vendor independent of the
           databases in the experiment. They additionally support the Airbyte
           open source data integration engine giving you an ETL path to move you
           data to another database.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Pricing:</span>PlanetScale has some incredibly
+          <span class="font-bold">Pricing: </span>PlanetScale has some incredibly
           generous read/write{" "}
           <a
             class={linkStyles}
@@ -872,7 +879,7 @@ export default function Analysis() {
             </path>
           </g>
         </svg>
-        Upstash Redis analysis
+        Upstash Redis
       </h3>
       <div class="mt-8" id="UpstashRedisAnalysis">
         <table class="text-left bg-[#202020]">
@@ -936,7 +943,7 @@ export default function Analysis() {
           </tbody>
         </table>
         <p class="mt-8">
-          <span class="font-bold">Setup/Configuration:</span>Upstash has a
+          <span class="font-bold">Setup/Configuration: </span>Upstash has a
           simple process to create a database through their UI console. You
           choose a name, global or regional configuration, primary region and
           read region(s) along with a few other options. Connection is
@@ -953,7 +960,7 @@ export default function Analysis() {
           getting up and running on Deno Deploy.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Local development:</span>
+          <span class="font-bold">Local development: </span>
           <a
             class={linkStyles}
             href="https://docs.upstash.com/redis/sdks/javascriptsdk/developing-or-testing"
@@ -976,7 +983,7 @@ export default function Analysis() {
           least robust local development experience.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Global distribution:</span>Upstash provides 8
+          <span class="font-bold">Global distribution: </span>Upstash provides 8
           regions around the globe (3 US, 2 Europe, 1 Asia, 1 S. America, and 1
           Australia) to use for primary and read replicas. As Upstash charge per
           100k commands and each replica write consumes a command, adding
@@ -984,7 +991,7 @@ export default function Analysis() {
           how write-heavy your application is.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Ease of use:</span>Upstash was very easy to
+          <span class="font-bold">Ease of use: </span>Upstash was very easy to
           use with good documentation. For users with experience of Redis this
           will be a particularly easy database to use as Upstash Redis is Redis
           compatible. To get working with Deno Deploy, only{" "}
@@ -997,7 +1004,7 @@ export default function Analysis() {
           and environment variables are needed.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Performance:</span>While achieving 4 star
+          <span class="font-bold">Performance: </span>While achieving 4 star
           performance, this is really a tale of two use cases. Write performance
           is sub-par (2 stars), while eventual read performance is excellent (5
           stars), faster in almost every region than the other databases (N.B.
@@ -1005,18 +1012,18 @@ export default function Analysis() {
           others have 3 at most).
         </p>
         <p class="mt-3">
-          <span class="font-bold">Consistency:</span>A weak point of Upstash
+          <span class="font-bold">Consistency: </span>A weak point of Upstash
           Redis is consistency. Their consistency model is eventual consistency.
           Additionally transactions, while supported in the API, are not ACID
           compliant.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Features/Flexibility:</span>Upstash Redis is
+          <span class="font-bold">Features/Flexibility: </span>Upstash Redis is
           fairly feature rich. Some features include data eviction, encryption
           at rest, IP whitelisting and backup/restore amongst others.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Vendor independence:</span>Like the other
+          <span class="font-bold">Vendor independence: </span>Like the other
           databases besides KV, Upstash Redis is portable and you can move it to
           another edge provider. Additionally, by using a Redis compatible API,
           you can in theory move to a different Redis installation. One
@@ -1024,7 +1031,7 @@ export default function Analysis() {
           globally distributed durable Redis.
         </p>
         <p class="mt-3">
-          <span class="font-bold">Pricing:</span>Upstash provides the simplest
+          <span class="font-bold">Pricing: </span>Upstash provides the simplest
           {" "}
           <a
             class={linkStyles}

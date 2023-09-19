@@ -32,15 +32,14 @@ export default function Conclusion() {
         a core feature. Also, it was the only database in this experiment to
         incur a cold start penalty. That said, it's hard to beat it's enterprise
         features and AWS integrations. I found the lack of documentation on Deno
-        usage very frustrating, though I expect this to improve dramatically
-        once{" "}
+        usage very frustrating, though now that {" "}
         <a
           class={linkStyles}
           href="https://deno.com/manual/node/npm_specifiers"
         >
           npm specifiers
         </a>{" "}
-        are supported in Deploy.
+        are supported in Deploy this should hopefully allow users to follow node based documentation.
       </p>
       <p class="mt-3">
         PlanetScale was a surprise to me having heard great things about it.
@@ -78,9 +77,10 @@ export default function Conclusion() {
         locally, the KV database is just there waiting to be used. This will
         boost team creativity and productivity (less barriers) as well as
         reducing development costs. As a beta product, it's still lacking in a
-        number of features but if the pricing model is competitive it's a no
-        brainer choice for use on Deploy assuming it fits your data modelling
-        needs.
+        number of features.  If you are already hosting on Deploy, using KV
+        could be free if you stick within plan limits but pricing will quickly become
+        much more expensive compared to other databases if you consistently 
+        read or write more than the plan limits.
       </p>
       <p class="mt-3">
         Ultimately which database you choose will depend on your use case. If

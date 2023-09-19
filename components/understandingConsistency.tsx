@@ -17,11 +17,11 @@ export default function UnderstandingConsistency() {
         support. Two common ones are:
         <ul class="list-disc ml-7 mt-3">
           <li>
-            Strong consistency: All reads are guaranteed to return the most
+            <b>Strong consistency</b>: All reads are guaranteed to return the most
             recent write at the cost of higher latency
           </li>
           <li>
-            Eventual consistency: Reads may return old/stale data, typically at
+            <b>Eventual consistency</b>: Reads may return old/stale data, typically at
             much lower latencies, but will eventually return the most recent
             write. Under normal circumstances, you would expect database writes
             to be consistent within a number of seconds but many factors can
@@ -70,9 +70,9 @@ export default function UnderstandingConsistency() {
           class={linkStyles}
           href="https://css-tricks.com/consistent-backends-and-ux:-why-should-you-care/"
         >
-          this
+          this 4 part series
         </a>{" "}
-        4 part series is an excellent read.
+         is an excellent read.
       </p>
     </>
   );

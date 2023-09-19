@@ -183,7 +183,7 @@ export default function Home(data: PageProps<PerfProps>) {
             Looking at Deno KV, DynamoDB, Fauna, PlanetScale and Upstash Redis
             on Deno Deploy
           </h2>
-          <p class="mb-8 mt-5">By Chris Knight, 20/06/2023</p>
+          <p class="mb-8 mt-5">By Chris Knight, 20/06/2023 (last updated 19/09/23)</p>
           <p class="italic">
             Deno recently launched a new global database, KV. Is it any good? In
             this post, we'll explore KV and other globally distributed databases
@@ -293,7 +293,7 @@ export default function Home(data: PageProps<PerfProps>) {
             <span class="block mt-3 text-xs">
               (Performance entries are held in Deno KV which returned and
               processed statistics for{"  "}{totalPageLoads}{" "}
-              performance entries across {regions.size} regions in{" "}
+              performance measurements across {regions.size} regions in{" "}
               {data.data.entriesListPerf}ms.)
             </span>
           </p>
