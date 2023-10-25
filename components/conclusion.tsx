@@ -108,7 +108,7 @@ export default function Conclusion() {
       <p class="mt-3 mb-16 italic">
         <span class="font-bold">Disclaimer:</span>I have no affiliation with any
         of the companies mentioned in this article and am a first time user of
-        each of the databases in the experiment.
+        each of the databases in the experiment. abc
       </p>
     </>
   );
